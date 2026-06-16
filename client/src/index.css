@@ -1,0 +1,206 @@
+/*
+  ----------------------------------------------------------------------------
+  0. CSS RESET
+  ----------------------------------------------------------------------------
+*/
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  scroll-padding: 50px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  /*
+    --------------------------------------------------------------------------
+    1. COLORS
+    --------------------------------------------------------------------------
+  */
+
+  /* Brand greens — primary actions, accents, italic highlight words */
+  --color-primary: #1b5e20; /* deep pitch green: buttons, nav, headings */
+  --color-primary-light: #4caf50; /* turf green: hovers, ::selection, accents */
+  --color-primary-dark: #104a14; /* button hover (SignIn/SignUp) */
+  --color-primary-bright: #6cef7c; /* hero button hover */
+
+  /* Soft green tints */
+  --color-tint-green: rgba(
+    223,
+    234,
+    221,
+    0.645
+  ); /* Sign page bg + icon squares */
+  --color-accent-bg: rgba(27, 94, 32, 0.08); /* soft green accent surface */
+  --color-accent-border: rgba(27, 94, 32, 0.24); /* accent focus/hover border */
+
+  /* Neutrals — surfaces & backgrounds */
+  --color-black: #000000; /* navbar, stats, built-for, footer sections */
+  --color-white: #ffffff;
+  --color-bg: #f8fafc; /* default page body background */
+  --color-surface-dark: #0e0e0e; /* dark card surface (owner card) */
+  --color-surface-light: #f5f5f5; /* light section bg (How It Works) */
+  --color-surface-muted: #f3f3f3; /* light card surface (organizer card) */
+
+  /* Text */
+  --color-text-main: #1e293b; /* primary headings & body */
+  --color-text-heading: #0f172a; /* darkest heading text */
+  --color-text-muted: #9e9e9e; /* secondary/body copy (rgb 158) */
+  --color-text-subtle: #666666; /* form helper / password hints */
+  --color-text-light: rgb(210, 210, 210); /* light body text on dark bg */
+
+  /* On-dark whites (translucent text/borders over black sections) */
+  --color-on-dark: rgba(255, 255, 255, 0.697); /* nav links idle */
+  --color-on-dark-hover: rgba(255, 255, 255, 0.918); /* nav links hover */
+  --color-on-dark-muted: rgba(210, 210, 210, 0.727); /* footer / sub text */
+  --color-border-dark: rgba(
+    255,
+    255,
+    255,
+    0.149
+  ); /* borders on dark sections */
+  --color-divider-dark: rgba(255, 255, 255, 0.143); /* hr / dividers on dark */
+  --color-border-on-dark: rgba(
+    255,
+    255,
+    255,
+    0.369
+  ); /* outline button border */
+
+  /* Borders — light surfaces */
+  --color-border: #e2e8f0; /* default input/divider border */
+  --color-border-input: #dddddd; /* form input border */
+
+  /* Status */
+  --color-success: #2e7d32;
+  --color-danger: #d32f2f;
+  --color-danger-text: red; /* error text / weak password */
+  --color-warning: #f57c00;
+  --color-warning-text: orange; /* medium password */
+
+  /*
+    --------------------------------------------------------------------------
+    2. TYPOGRAPHY
+    --------------------------------------------------------------------------
+  */
+
+  /* Font families */
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display:
+    "Bricolage Grotesque", sans-serif; /* big headings, stat numbers */
+  --font-serif: "Playfair Display", Arial, serif; /* sign-page cover */
+  --font-mono: "JetBrains Mono", monospace; /* step numbers */
+
+  /* Font sizes (em scale, matching the original responsive sizing) */
+  --font-size-xs: 0.8em; /* step numbers, password hints */
+  --font-size-sm: 0.9em; /* small labels, role pills, errors */
+  --font-size-base: 1em; /* body copy */
+  --font-size-md: 1.2em; /* nav links, hero body, checklist items */
+  --font-size-lg: 1.3em; /* large / button text */
+  --font-size-xl: 1.8em; /* form headers */
+  --font-size-2xl: 2.5em; /* owner / organizer card titles */
+  --font-size-display: 6em; /* section titles (How It Works, Built For) */
+  --font-size-hero: 15em; /* hero headline */
+
+  /* Font weights */
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line heights */
+  --line-height-tight: 1; /* large display headings */
+  --line-height-heading: 1.1;
+  --line-height-snug: 1.2;
+  --line-height-body: 1.6; /* default body / paragraph copy */
+
+  /* Letter spacing */
+  --letter-spacing-tightest: -6px; /* hero headline */
+  --letter-spacing-tighter: -4px; /* section titles */
+  --letter-spacing-tight: -1px; /* card titles */
+  --letter-spacing-wide: 0.05em; /* uppercase badges */
+
+  /*
+    --------------------------------------------------------------------------
+    3. SPACING  (recurring padding / margin / gap values)
+    --------------------------------------------------------------------------
+  */
+  --spacing-xs: 8px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 60px;
+  --spacing-section-y: 60px; /* section vertical padding */
+  --spacing-section-x: 150px; /* section horizontal padding (full-bleed sections) */
+  --gap-form: 18px; /* vertical gap between form fields */
+
+  /*
+    --------------------------------------------------------------------------
+    4. BORDERS & RADIUS
+    --------------------------------------------------------------------------
+  */
+  --radius-sm: 8px; /* inputs, buttons, progress bars */
+  --radius-md: 12px; /* cards */
+  --radius-icon: 15px; /* icon squares, role pills, form container */
+  --radius-badge: 20px; /* status badges */
+  --radius-button: 30px; /* primary / nav / hero buttons */
+  --radius-pill: 50px; /* slide button */
+
+  --border-width: 1px;
+  --border-width-input: 1.5px;
+  --text-stroke: 2.5px; /* outlined ("pitch" / "game") text */
+
+  /*
+    --------------------------------------------------------------------------
+    5. SHADOWS  (incl. signature green glow on hover)
+    --------------------------------------------------------------------------
+  */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* standard card elevation */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+  --shadow-form: 0px 0px 22px #0b35113a; /* sign-page form container */
+  --shadow-green-glow: 0px 0px 22px #5bcf5f8a; /* button hover glow */
+  --shadow-green-glow-soft: 0px 0px 30px #2f773751; /* card hover glow */
+
+  /*
+    --------------------------------------------------------------------------
+    6. TRANSITIONS & MOTION
+    --------------------------------------------------------------------------
+  */
+  --transition-base: all 0.2s ease; /* the dominant transition */
+  --transition-slow: all 0.5s ease; /* form fade-in */
+  --transition-shadow: box-shadow 0.3s ease; /* card elevation */
+  --transition-border: border-color 0.2s; /* input focus */
+  --transition-cover: transform 0.7s cubic-bezier(0, 0.44, 0.36, 0.97); /* sign-page slide */
+  --ease-cover: cubic-bezier(0, 0.44, 0.36, 0.97);
+
+  /* Hover lift offsets (paired with --transition-base) */
+  --lift-sm: translateY(-1px);
+  --lift-md: translateY(-2px);
+  --lift-lg: translateY(-4px);
+  --lift-xl: translateY(-8px);
+
+  /*
+    --------------------------------------------------------------------------
+    7. LAYOUT
+    --------------------------------------------------------------------------
+  */
+  --container-max: 1200px; /* centered content max-width */
+  --container-pad-x: 24px; /* container side padding */
+  --z-navbar: 1000;
+}
