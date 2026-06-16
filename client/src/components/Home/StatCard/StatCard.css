@@ -1,0 +1,22 @@
+.stat-card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: rgb(255, 255, 255);
+  width: 25%;
+  border-right: 1px solid rgba(255, 255, 255, 0.149);
+  border-left: 1px solid rgba(255, 255, 255, 0.149);
+  font-weight: 800;
+  padding: 55px 10px;
+  padding-bottom: 75px;
+}
+.stat-text {
+  font-size: 1.6em;
+  color: rgba(210, 210, 210, 0.644);
+}
+.stat-number {
+  font-size: 5em;
+  font-family: "Bricolage Grotesque", sans-serif;
+}

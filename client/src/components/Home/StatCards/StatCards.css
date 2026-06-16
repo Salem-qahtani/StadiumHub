@@ -1,0 +1,10 @@
+.stat-container {
+  border: 1px solid rgba(255, 255, 255, 0.149);
+  background-color: #000000;
+  padding: 0px 150px;
+  display: flex;
+}
+.stat-container::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}

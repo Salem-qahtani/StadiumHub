@@ -1,0 +1,38 @@
+.built-for-section {
+  background-color: #000000;
+  padding: 60px 150px;
+}
+.built-for-title {
+  font-size: 6em;
+  color: white;
+  font-family: "Bricolage Grotesque";
+  letter-spacing: -4px;
+  line-height: 1;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.built-for-title::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.built-for-game {
+  color: transparent;
+  -webkit-text-stroke: 2.5px #fff;
+}
+.built-for-body {
+  color: rgb(158, 158, 158);
+  font-size: 1em;
+  line-height: 1.6;
+  max-width: 620px;
+  margin-bottom: 40px;
+}
+.built-for-body::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.for-cards-container {
+  padding-top: 30px;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}

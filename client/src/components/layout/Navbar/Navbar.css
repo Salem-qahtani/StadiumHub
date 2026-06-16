@@ -1,0 +1,86 @@
+.navbar a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.697);
+  user-select: none;
+}
+.navbar h3 {
+  font-size: 1.2em;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.navbar h3::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.nav-buttons-logout {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+}
+.nav-buttons-logout button {
+  padding: 8px 15px;
+  font-size: 0.9em;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 15px 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+}
+.nav-logo a {
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  font-weight: bold;
+}
+.nav-links {
+  display: flex;
+  gap: 30px;
+  color: rgba(255, 255, 255, 0.697);
+  cursor: pointer;
+}
+.nav-links a:hover {
+  color: rgba(255, 255, 255, 0.918);
+}
+.home-link {
+  font-weight: 600;
+  font-size: 1.2em;
+}
+.home-link:hover {
+  color: rgba(255, 255, 255, 0.918);
+}
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+}
+.black-button {
+  color: white;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(255, 255, 255, 0.369);
+  padding: 10px 18px;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  user-select: none;
+}
+.green-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  background-color: #4caf50;
+  border: none;
+  box-shadow: 0px 0px 10px #4caf50;
+  user-select: none;
+}

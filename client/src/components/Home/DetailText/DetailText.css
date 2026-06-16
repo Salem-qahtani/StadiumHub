@@ -1,0 +1,35 @@
+.details-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.details-white {
+  user-select: none;
+  margin-top: 3px;
+  font-family: "JetBrains Mono";
+  color: rgb(210, 210, 210);
+  font-size: 0.8em;
+}
+.details-green {
+  user-select: none;
+  margin-top: 3px;
+  font-family: "JetBrains Mono";
+  color: var(--color-primary-light);
+  font-size: 0.8em;
+}
+.glow-dot-green {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-primary-light);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}
+.glow-dot-red {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--status-reserved);
+  box-shadow: 0 0 8px rgba(211, 47, 47, 0.6);
+}

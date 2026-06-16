@@ -1,0 +1,66 @@
+.tutorial-card {
+  margin-top: 60px;
+  flex: 1;
+  border: 1px solid rgb(195, 195, 195);
+  border-radius: var(--radius-icon);
+  padding: 40px 30px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.tutorial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 0px 30px #2f773751;
+}
+.tutorial-card:hover .tutorial-card-icon {
+  background-color: var(--color-primary);
+  color: white;
+}
+.tutorial-card:hover #tutorial-arrow {
+  transform: translateX(7px);
+  color: var(--color-primary);
+}
+.tutorial-card::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.tutorial-card-number {
+  font-family: "JetBrains Mono";
+  font-size: 0.8em;
+  color: rgb(158, 158, 158);
+  user-select: none;
+}
+.tutorial-card-icon {
+  width: 70px;
+  height: 70px;
+  background-color: rgba(223, 234, 221, 0.645);
+  border-radius: var(--radius-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(3, 72, 8);
+  font-size: 1.1em;
+  transition: all 0.2s ease;
+}
+.tutorial-card-text {
+  color: rgb(0, 0, 0);
+  font-size: 1.3em;
+  font-family: "Bricolage Grotesque";
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.tutorial-card-body {
+  color: rgb(158, 158, 158);
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+.tutorial-card-icon i {
+  font-size: 1.5em;
+}
+#tutorial-arrow {
+  transition: all 0.2s ease;
+  color: rgb(158, 158, 158);
+}

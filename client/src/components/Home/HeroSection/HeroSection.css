@@ -1,0 +1,93 @@
+.hero-section {
+  background: linear-gradient(135deg, #0a0c0a 0%, #1b2d1d 60%, #0a0d0a 100%);
+  padding: 0px 150px;
+  padding-top: 100px;
+  padding-bottom: 30px;
+}
+.hero-text {
+  font-size: 15em;
+  margin-top: 40px;
+  color: white;
+  font-family: "Bricolage Grotesque";
+  letter-spacing: -6px;
+  line-height: 1;
+}
+.hero-text::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.my-hr {
+  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.143);
+  margin-top: 20px;
+}
+.perfect {
+  font-style: italic;
+  color: var(--color-primary-light);
+}
+.pitch {
+  color: transparent;
+  -webkit-text-stroke: 2.5px #fff;
+}
+.hero-body-container {
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hero-body {
+  font-size: 1.2em;
+  color: rgb(210, 210, 210);
+  max-width: 500px;
+}
+.hero-body::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.hero-buttons {
+  padding: 30px;
+  display: flex;
+  gap: 15px;
+}
+.hero-buttons .black-button {
+  transition: all 0.2s ease;
+  background-color: #0a0c0a00;
+  font-size: 1.3em;
+  border: 1px solid white;
+  border-radius: var(--radius-button);
+  padding: 15px 22px;
+}
+.hero-buttons .black-button:hover {
+  color: black;
+  background-color: white;
+}
+.hero-buttons .green-button {
+  transition: all 0.2s ease;
+  font-size: 1.3em;
+  padding: 15px 22px;
+  border-radius: var(--radius-button);
+  box-shadow: none;
+}
+.hero-buttons .green-button:hover {
+  background-color: #6cef7c;
+  transform: translateY(-2px);
+  box-shadow: 0px 0px 30px #5fe96f49;
+}
+.hero-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sign-in-p {
+  color: rgba(210, 210, 210, 0.727);
+  user-select: none;
+}
+.sign-in-p a {
+  color: rgba(210, 210, 210, 0.727);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.sign-in-p a:hover {
+  color: rgba(255, 255, 255, 0.918);
+}

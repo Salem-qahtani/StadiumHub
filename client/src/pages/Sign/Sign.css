@@ -1,0 +1,97 @@
+.Sign-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(223, 234, 221, 0.645);
+  height: 100vh;
+}
+.forms-container {
+  position: relative;
+  padding: 8px 0px;
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  width: 1000px;
+  background-color: white;
+  border-radius: var(--radius-icon);
+  box-shadow: 0px 0px 22px #0b35113a;
+  overflow: hidden;
+}
+.forms-header {
+  color: var(--color-primary);
+}
+.forms-header::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
+.cover-SignIn,
+.cover-SignUp {
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    #0c3f0c 0%,
+    var(--color-primary) 60%,
+    #0c3f0c 100%
+  );
+  transition: transform 0.7s cubic-bezier(0, 0.44, 0.36, 0.97);
+}
+.cover-SignIn {
+  transform: translateX(0%);
+}
+.cover-SignUp {
+  transform: translateX(100%);
+}
+.errors {
+  font-size: 0.9em;
+  padding-left: 5px;
+  color: red;
+}
+.slide-button {
+  padding: 12px 40px;
+  padding-bottom: 15px;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid white;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: all 0.1s ease;
+  user-select: none;
+  font-family: "Playfair Display", Arial;
+}
+.slide-button:hover {
+  cursor: pointer;
+}
+.cover {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: "Playfair Display", Arial;
+}
+/*
+Libre Caslon Display
+Playfair Display
+*/
+.cover-header {
+  color: white;
+}
+.cover-body {
+  color: white;
+  text-align: center;
+  max-width: 400px;
+}
+.cover::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}
