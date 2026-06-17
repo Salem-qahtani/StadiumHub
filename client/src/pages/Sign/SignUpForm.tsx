@@ -1,5 +1,5 @@
 import "./SignUpForm.css";
-import { useState, useEffect, type FormEvent, type MouseEvent } from "react";
+import { useState, useEffect, type MouseEvent } from "react";
 import PasswordStrength from "./PasswordStrength";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -16,6 +16,14 @@ type SignUpErrors = {
   username?: string;
   password?: string;
   submit?: string;
+};
+
+type ApiError = {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
 };
 
 function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
@@ -61,6 +69,9 @@ function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
     if (!username.trim()) {
       errs.username = "Username is required.";
     }
+    if (!password.trim()) {
+      errs.password = "Password is required.";
+    }
     if (strength === "Weak") {
       errs.password = "Password is Weak.";
     } else if (conf !== password) {
@@ -69,7 +80,7 @@ function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
 
     return errs;
   }
-  async function handleForm(event: FormEvent<HTMLFormElement>) {
+  async function handleForm(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const errs = validate();
     setErrors(errs);
@@ -82,23 +93,13 @@ function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
           password,
           role,
         });
-        const { token, user } = response.data;
-        login(
-          {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            role: user.role,
-          },
-          token,
-        );
+        const { user, token } = response.data;
         resetForm();
+        login(user, token);
         navigate("/landing");
-      } catch (error) {
-        const errorMsg =
-          (error as { response?: { data?: { message?: string } } }).response
-            ?.data?.message || "Sign up failed. Try again.";
-        setErrors({ submit: errorMsg });
+      } catch (err) {
+        const error = err as ApiError;
+        setErrors({ submit: error.response?.data?.error || "Signup failed" });
       } finally {
         setLoading(false);
       }

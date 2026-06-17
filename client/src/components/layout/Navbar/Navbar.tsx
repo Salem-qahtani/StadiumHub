@@ -24,7 +24,7 @@ function Navbar({ setIsSignIn }: NavbarProps) {
     <>
       <nav className="navbar">
         <div className="nav-logo">
-          <a href="#hero">⚽ PitchSide</a>
+          <a href="#hero">⚽ StadiumHub</a>
         </div>
         {isAuthenticated ? (
           <div className="nav-links home">

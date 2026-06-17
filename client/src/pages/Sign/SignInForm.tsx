@@ -1,5 +1,5 @@
 import "./SignInForm.css";
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
@@ -14,6 +14,13 @@ type SignInErrors = {
   password?: string;
   submit?: string;
 };
+type ApiError = {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+};
 
 function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
   const [username, setUsername] = useState<string>("");
@@ -23,11 +30,6 @@ function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  function resetForm() {
-    setPassword("");
-    setUsername("");
-    setErrors({});
-  }
   function validate(): SignInErrors {
     const errs: SignInErrors = {};
     if (!username.trim()) {
@@ -39,7 +41,7 @@ function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
     return errs;
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const errs = validate();
     setErrors(errs);
@@ -47,27 +49,22 @@ function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
       setLoading(true);
       try {
         const response = await api.post("/auth/signin", { username, password });
-        const { token, user } = response.data;
-        login(
-          {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            role: user.role,
-          },
-          token,
-        );
+        const { user, token } = response.data;
+        login(user, token);
         resetForm();
         navigate("/landing");
-      } catch (error) {
-        const errorMsg =
-          (error as { response?: { data?: { message?: string } } }).response
-            ?.data?.message || "Sign in failed. Try again.";
-        setErrors({ submit: errorMsg });
+      } catch (err) {
+        const error = err as ApiError;
+        setErrors({ submit: error.response?.data?.error || "sign in failed" });
       } finally {
         setLoading(false);
       }
     }
+  }
+  function resetForm() {
+    setPassword("");
+    setUsername("");
+    setErrors({});
   }
   useEffect(() => {
     if (isSliding) resetForm();

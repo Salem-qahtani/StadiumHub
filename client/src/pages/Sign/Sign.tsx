@@ -23,7 +23,7 @@ function Sign({ isSignIn, setIsSignIn }: SignProps) {
   return (
     <div className="Sign-page">
       <title>Sign</title>
-      <h3 className="forms-header">PitchSide</h3>
+      <h3 className="forms-header">StadiumHub</h3>
       <div className="forms-container">
         <div className={`cover-${isSignIn ? "SignUp" : "SignIn"} cover`}>
           {isSignIn ? (
