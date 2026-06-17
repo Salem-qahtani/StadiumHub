@@ -76,7 +76,7 @@ async function signin(req: Request, res: Response) {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ error: "Server error" });
   }
 }
 export { signup, signin };

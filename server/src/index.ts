@@ -19,8 +19,7 @@ app.use((req, res) => {
 });
 // global error handeler
 app.use((err: any, req: any, res: any, next: any) => {
-  console.log("Global error", err);
-  res.status(500).json({ error: "server error" });
+  res.status(500).json({ error: "Server error" });
 });
 
 const PORT = process.env.PORT || 3000;
