@@ -42,7 +42,7 @@ function Navbar({ setIsSignIn }: NavbarProps) {
         {isAuthenticated ? (
           <div className="nav-buttons-logout">
             <h3>{user?.username}</h3>
-            <button className="signout-button" onClick={logout}>
+            <button className="black-button" onClick={logout}>
               Log out
             </button>
           </div>

@@ -17,10 +17,6 @@
   gap: 20px;
   color: white;
 }
-.nav-buttons-logout button {
-  padding: 8px 15px;
-  font-size: 0.9em;
-}
 .navbar {
   position: fixed;
   top: 0;
@@ -70,6 +66,16 @@
   border-radius: var(--radius-button);
   cursor: pointer;
   user-select: none;
+  transition: var(--transition-base);
+}
+.navbar .black-button:hover {
+  color: black;
+  background-color: white;
+  border-color: white;
+  transform: translateY(-1px);
+}
+.navbar .black-button:active {
+  transform: translateY(0);
 }
 .green-button {
   display: flex;
@@ -83,4 +89,13 @@
   border: none;
   box-shadow: 0px 0px 10px #4caf50;
   user-select: none;
+  transition: var(--transition-base);
+}
+.navbar .green-button:hover {
+  background-color: #6cef7c;
+  transform: translateY(-1px);
+  box-shadow: 0px 0px 30px #5fe96f49;
+}
+.navbar .green-button i {
+  transition: var(--transition-base);
 }
