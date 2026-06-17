@@ -204,3 +204,15 @@ body {
   --container-pad-x: 24px; /* container side padding */
   --z-navbar: 1000;
 }
+
+/*
+  ----------------------------------------------------------------------------
+  8. GLOBAL FORM FOCUS
+  Soft green glow ring on focused inputs (matches original behavior).
+  ----------------------------------------------------------------------------
+*/
+input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
