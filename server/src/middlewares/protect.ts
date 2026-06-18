@@ -17,9 +17,9 @@ function protect(req: Request, res: Response, next: NextFunction) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    req.body.userId = decoded.id;
-    req.body.username = decoded.username;
-    req.body.userRole = decoded.role;
+    req.userId = decoded.id;
+    req.username = decoded.username;
+    req.userRole = decoded.role;
     next();
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });

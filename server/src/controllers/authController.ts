@@ -1,15 +1,22 @@
-import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client/index.js";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { Request, Response, NextFunction } from "express";
+import prisma from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-const prisma = new PrismaClient({ adapter });
-
-async function signup(req: Request, res: Response) {
+async function signup(req: Request, res: Response, next: NextFunction) {
   try {
     const { name, username, password, role } = req.body;
+
+    if (!name?.trim() || !username?.trim() || !password?.trim() || !role?.trim()) {
+      res.status(400).json({ error: "All fields are required" });
+      return;
+    }
+
+    const allowedRoles = ["owner", "organizer"];
+    if (!allowedRoles.includes(role)) {
+      res.status(400).json({ error: "Invalid role" });
+      return;
+    }
 
     const existingUser = await prisma.user.findUnique({ where: { username } });
 
@@ -43,13 +50,18 @@ async function signup(req: Request, res: Response) {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    next(error);
   }
 }
 
-async function signin(req: Request, res: Response) {
+async function signin(req: Request, res: Response, next: NextFunction) {
   try {
     const { username, password } = req.body;
+
+    if (!username?.trim() || !password?.trim()) {
+      res.status(400).json({ error: "Username and password are required" });
+      return;
+    }
 
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) {
@@ -76,7 +88,7 @@ async function signin(req: Request, res: Response) {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    next(error);
   }
 }
 export { signup, signin };

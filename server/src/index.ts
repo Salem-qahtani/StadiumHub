@@ -3,6 +3,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import stadiumRoutes from "./routes/stadiumRoutes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/stadiums", stadiumRoutes);
 
 // 404
 app.use((req, res) => {
@@ -19,6 +21,7 @@ app.use((req, res) => {
 });
 // global error handeler
 app.use((err: any, req: any, res: any, next: any) => {
+  console.error(err);
   res.status(500).json({ error: "Server error" });
 });
 

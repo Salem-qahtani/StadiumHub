@@ -5,14 +5,46 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String 
-  username String @unique
-  password String 
-  role String
-  createdAt DateTime @default(now())
+  id           Int           @id @default(autoincrement())
+  name         String
+  username     String        @unique
+  password     String
+  role         String
+  createdAt    DateTime      @default(now())
+  stadiums     Stadium[]      
+  reservations Reservation[]  
+}
+
+model Stadium {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  location    String
+  ownerId     Int
+  owner       User     @relation(fields: [ownerId], references: [id])
+  slots       Slot[]
+}
+
+model Slot {
+  id           Int           @id @default(autoincrement())
+  stadiumId    Int
+  date         DateTime
+  startTime    String
+  endTime      String
+  available    Boolean       @default(true)
+  stadium      Stadium       @relation(fields: [stadiumId], references: [id])
+  reservations Reservation[]
+}
+
+model Reservation {
+  id          Int      @id @default(autoincrement())
+  slotId      Int
+  organizerId Int
+  status      String   @default("confirmed")
+  createdAt   DateTime @default(now())
+  slot        Slot     @relation(fields: [slotId], references: [id])
+  organizer   User     @relation(fields: [organizerId], references: [id])
 }
