@@ -31,7 +31,7 @@ model Stadium {
 model Slot {
   id           Int           @id @default(autoincrement())
   stadiumId    Int
-  date         DateTime
+  date         DateTime      @db.Date
   startTime    String
   endTime      String
   available    Boolean       @default(true)

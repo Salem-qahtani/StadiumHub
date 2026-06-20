@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createStadium,
   getStadiums,
+  getOwnerStadiums,
   getStadium,
   updateStadium,
   deleteStadium,
@@ -10,8 +11,9 @@ import protect from "../middlewares/protect.js";
 
 const router = Router();
 
-router.get("/", getStadiums);
-router.get("/:id", getStadium);
+router.get("/", protect, getStadiums);
+router.get("/owner", protect, getOwnerStadiums);
+router.get("/:id", protect, getStadium);
 router.post("/", protect, createStadium);
 router.put("/:id", protect, updateStadium);
 router.delete("/:id", protect, deleteStadium);

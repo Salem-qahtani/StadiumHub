@@ -50,6 +50,24 @@ async function getStadiums(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function getOwnerStadiums(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    if (req.userRole !== "owner") {
+      return res.status(403).json({ error: "unauthrized access" });
+    }
+    const stadiums = await prisma.stadium.findMany({
+      where: { ownerId: req.userId },
+    });
+    res.json(stadiums);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function getStadium(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id as string);
@@ -133,4 +151,11 @@ async function deleteStadium(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export { createStadium, getStadiums, getStadium, updateStadium, deleteStadium };
+export {
+  createStadium,
+  getStadiums,
+  getOwnerStadiums,
+  getStadium,
+  updateStadium,
+  deleteStadium,
+};
