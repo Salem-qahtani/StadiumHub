@@ -20,22 +20,30 @@ async function createReservation(
     if (!slot) {
       return res.status(404).json({ error: "Slot not found" });
     }
-    // atomic claim: only succeeds if the slot is still available
-    const claimed = await prisma.slot.updateMany({
-      where: { id: slotId, available: true },
-      data: { available: false },
+    // atomic claim + create in one transaction:
+    // transaction rolls the claim back if the create fails
+    const reservation = await prisma.$transaction(async (tx) => {
+      const claimed = await tx.slot.updateMany({
+        where: { id: slotId, available: true },
+        data: { available: false },
+      });
+      if (claimed.count === 0) {
+        return null;
+      }
+      return tx.reservation.create({
+        data: {
+          slotId,
+          organizerId: req.userId!,
+          status: "confirmed",
+        },
+      });
     });
-    if (claimed.count === 0) {
+    if (!reservation) {
       return res.status(409).json({ error: "Slot no longer available" });
     }
-    const reservation = await prisma.reservation.create({
-      data: {
-        slotId,
-        organizerId: req.userId!,
-        status: "confirmed",
-      },
-    });
-    return res.status(201).json({ message: "reservation created", reservation });
+    return res
+      .status(201)
+      .json({ message: "reservation created", reservation });
   } catch (error) {
     next(error);
   }
@@ -85,16 +93,23 @@ async function cancelReservation(
       return res.status(400).json({ error: "Reservation already cancelled" });
     }
 
-    const cancelled = await prisma.reservation.update({
-      where: { id: id },
-      data: { status: "cancelled" },
+    // cancel + free the slot atomically so we never leave a cancelled
+    // reservation with its slot still marked unavailable
+    const cancelled = await prisma.$transaction(async (tx) => {
+      const updated = await tx.reservation.update({
+        where: { id: id },
+        data: { status: "cancelled" },
+      });
+      await tx.slot.update({
+        where: { id: reservation.slotId },
+        data: { available: true },
+      });
+      return updated;
     });
-    // free the slot so it can be booked again
-    await prisma.slot.update({
-      where: { id: reservation.slotId },
-      data: { available: true },
+    return res.json({
+      message: "reservation cancelled",
+      reservation: cancelled,
     });
-    return res.json({ message: "reservation cancelled", reservation: cancelled });
   } catch (error) {
     next(error);
   }
