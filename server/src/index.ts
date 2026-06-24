@@ -6,6 +6,8 @@ import authRoutes from "./routes/authRoutes.js";
 import stadiumRoutes from "./routes/stadiumRoutes.js";
 import slotRoutes from "./routes/slotRoutes.js";
 import reservationRoutes from "./routes/reservationRoutes.js";
+import conversationRoutes from "./routes/conversationRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/stadiums", stadiumRoutes);
 app.use("/api/stadiums", slotRoutes);
 app.use("/api/reservations", reservationRoutes);
+app.use("/api/conversations", conversationRoutes);
+app.use("/api/conversations", messageRoutes);
 
 // 404
 app.use((req, res) => {
