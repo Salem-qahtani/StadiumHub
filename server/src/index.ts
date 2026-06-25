@@ -1,7 +1,6 @@
 import "dotenv/config";
-
+import { initSocket } from "./socket.js";
 import { createServer } from "http";
-import { Server } from "socket.io";
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
@@ -10,9 +9,49 @@ import slotRoutes from "./routes/slotRoutes.js";
 import reservationRoutes from "./routes/reservationRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import jwt from "jsonwebtoken";
+import { getUserConversation } from "./controllers/messageControllers.js";
 
 const app = express();
 const server = createServer(app);
+const io = initSocket(server);
+
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error("Not authorized"));
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: number;
+      username: string;
+      role: string;
+    };
+    socket.data.userId = decoded.id;
+    socket.data.username = decoded.username;
+    socket.data.userRole = decoded.role;
+    next();
+  } catch (error) {
+    next(new Error("Not authorized"));
+  }
+});
+io.on("connection", (socket) => {
+  console.log(`user is connected on socket${socket.data.userId}`);
+
+  socket.on("joinConversation", async (conversationId: number) => {
+    const conversation = await getUserConversation(
+      conversationId,
+      socket.data.userId,
+    );
+    if (!conversation) {
+      return;
+    }
+    socket.join(`conversation:${conversationId}`);
+  });
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.data.userId}`);
+  });
+});
 // Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());

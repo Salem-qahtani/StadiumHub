@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../lib/prisma.js";
+import { getIO } from "../socket.js";
 
 //helper function
-async function getUserConversation(conversationId: number, userId: number) {
+export async function getUserConversation(
+  conversationId: number,
+  userId: number,
+) {
   return await prisma.conversation.findFirst({
     where: {
       id: conversationId,
@@ -59,6 +63,7 @@ async function sendMessage(req: Request, res: Response, next: NextFunction) {
         content: content,
       },
     });
+    getIO().to(`conversation:${conversation.id}`).emit("newMessage", message);
     return res.json(message);
   } catch (error) {
     next(error);
