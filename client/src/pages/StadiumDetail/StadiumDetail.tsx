@@ -179,7 +179,11 @@ function StadiumDetail() {
           {isOwner ? (
             <OwnerSlots stadiumId={stadium.id} />
           ) : (
-            <OrganizerSlots stadiumId={stadium.id} />
+            <OrganizerSlots
+              stadiumId={stadium.id}
+              stadiumName={stadium.name}
+              stadiumLocation={stadium.location}
+            />
           )}
         </>
       )}

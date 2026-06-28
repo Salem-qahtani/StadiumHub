@@ -9,6 +9,8 @@ export type Stadium = {
   location: string;
   images: string[];
   ownerId: number;
+  // included on GET /stadiums (organizer browse)
+  owner?: { username: string };
 };
 
 export type Slot = {

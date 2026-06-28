@@ -227,7 +227,6 @@ function MyStadiums() {
                   <MapPinIcon size={15} />
                   {stadium.location}
                 </p>
-                <p className="stadium-card-desc">{stadium.description}</p>
               </div>
               <div className="stadium-card-footer">
                 <button

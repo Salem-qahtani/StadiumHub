@@ -50,7 +50,10 @@ async function createStadium(req: Request, res: Response, next: NextFunction) {
 
 async function getStadiums(req: Request, res: Response, next: NextFunction) {
   try {
-    const search = req.query.search as string;
+    // req.query.search can be a string, array, or object — only treat a real
+    // string as a search term so a crafted ?search[]=… can't reach Prisma.
+    const raw = req.query.search;
+    const search = typeof raw === "string" ? raw.trim() : undefined;
 
     const stadiums = await prisma.stadium.findMany({
       where: search
@@ -61,6 +64,7 @@ async function getStadiums(req: Request, res: Response, next: NextFunction) {
             ],
           }
         : {},
+      include: { owner: { select: { username: true } } },
     });
     return res.json(stadiums);
   } catch (error) {

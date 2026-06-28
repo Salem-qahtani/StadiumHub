@@ -7,6 +7,7 @@ import DashboardLayout from "./components/layout/DashboardLayout/DashboardLayout
 import RoleSwitch from "./components/routing/RoleSwitch";
 import ComingSoon from "./components/routing/ComingSoon";
 import MyStadiums from "./pages/MyStadiums/MyStadiums";
+import BrowseStadiums from "./pages/BrowseStadiums/BrowseStadiums";
 import AddStadium from "./pages/AddStadium/AddStadium";
 import StadiumDetail from "./pages/StadiumDetail/StadiumDetail";
 import IncomingReservations from "./pages/IncomingReservations/IncomingReservations";
@@ -34,7 +35,7 @@ function App() {
           element={
             <RoleSwitch
               owner={<MyStadiums />}
-              organizer={<ComingSoon title="Browse Stadiums" />}
+              organizer={<BrowseStadiums />}
             />
           }
         />

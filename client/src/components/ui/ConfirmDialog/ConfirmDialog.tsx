@@ -9,6 +9,7 @@ type ConfirmDialogProps = {
   cancelLabel?: string;
   tone?: "primary" | "danger";
   loading?: boolean;
+  centered?: boolean;
   onConfirm: () => void;
   onClose: () => void;
 };
@@ -21,6 +22,7 @@ function ConfirmDialog({
   cancelLabel = "Cancel",
   tone = "danger",
   loading = false,
+  centered = false,
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
@@ -40,7 +42,9 @@ function ConfirmDialog({
         </>
       }
     >
-      <p className="confirm-message">{message}</p>
+      <p className={`confirm-message${centered ? " confirm-message-center" : ""}`}>
+        {message}
+      </p>
     </Modal>
   );
 }

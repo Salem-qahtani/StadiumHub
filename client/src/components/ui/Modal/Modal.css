@@ -61,6 +61,10 @@
 .confirm-message {
   color: var(--color-text-muted);
   line-height: var(--line-height-body);
+  white-space: pre-line; /* honor \n line breaks in the message */
+}
+.confirm-message-center {
+  text-align: center;
 }
 
 .modal-footer {
