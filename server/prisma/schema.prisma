@@ -26,6 +26,7 @@ model Stadium {
   name        String
   description String
   location    String
+  images      String[] @default([])
   ownerId     Int
   owner       User     @relation(fields: [ownerId], references: [id])
   slots       Slot[]

@@ -1,0 +1,49 @@
+.add-stadium {
+  max-width: 600px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--spacing-lg);
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-subtle);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.back-link:hover {
+  color: var(--color-primary);
+}
+
+.add-stadium-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-form);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-xl);
+}
+
+.add-stadium-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}
+
+@media (max-width: 600px) {
+  .add-stadium-actions {
+    flex-direction: column-reverse;
+  }
+  .add-stadium-actions .btn {
+    width: 100%;
+  }
+}

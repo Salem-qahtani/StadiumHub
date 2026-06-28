@@ -1,0 +1,261 @@
+.stadium-detail {
+  max-width: 860px;
+}
+
+/* back link reuses the same look as AddStadium's */
+.stadium-detail .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--spacing-lg);
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-subtle);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.stadium-detail .back-link:hover {
+  color: var(--color-primary);
+}
+
+/* ---------------- Header ---------------- */
+.detail-header {
+  margin-bottom: var(--spacing-lg);
+}
+.detail-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-heading);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-heading);
+}
+.detail-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+.detail-desc {
+  margin-top: var(--spacing-md);
+  max-width: 65ch;
+  color: var(--color-text-main);
+  line-height: var(--line-height-body);
+}
+
+/* ---------------- Gallery ---------------- */
+.gallery {
+  margin-bottom: var(--spacing-2xl);
+}
+.gallery-main {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-light);
+  aspect-ratio: 16 / 9;
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(10, 12, 10, 0.5);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.gallery-nav:hover {
+  background: rgba(10, 12, 10, 0.75);
+}
+.gallery-nav:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+.gallery-nav-prev {
+  left: var(--spacing-sm);
+}
+.gallery-nav-next {
+  right: var(--spacing-sm);
+}
+
+.gallery-counter {
+  position: absolute;
+  bottom: var(--spacing-sm);
+  right: var(--spacing-sm);
+  padding: 3px 10px;
+  border-radius: var(--radius-badge);
+  background: rgba(10, 12, 10, 0.6);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.gallery-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gallery-thumbs {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+.gallery-thumb {
+  width: 80px;
+  height: 60px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-surface-light);
+  transition: var(--transition-base);
+}
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.gallery-thumb:hover {
+  border-color: var(--color-accent-border);
+}
+.gallery-thumb.is-active {
+  border-color: var(--color-primary);
+}
+
+.gallery-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  aspect-ratio: 16 / 6;
+  margin-bottom: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  background: var(--color-tint-green);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ---------------- Slots (shared by owner + organizer) ---------------- */
+.slots-section {
+  border-top: var(--border-width) solid var(--color-border);
+  padding-top: var(--spacing-xl);
+}
+.slots-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+.slots-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-heading);
+  letter-spacing: var(--letter-spacing-tight);
+}
+.slots-subnote {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.slot-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+.slot-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.slot-when {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.slot-date {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-heading);
+}
+.slot-time {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.slot-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-left: auto;
+}
+
+/* reuse icon button look from MyStadiums */
+.slot-actions .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.slot-actions .icon-btn:hover {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-bg);
+  color: var(--color-primary);
+}
+.slot-actions .icon-btn-danger:hover {
+  border-color: var(--color-danger);
+  background: rgba(211, 47, 47, 0.06);
+  color: var(--color-danger);
+}
+
+.slot-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-form);
+}
+.slot-form-times {
+  display: flex;
+  gap: var(--spacing-md);
+}
+.slot-form-times > * {
+  flex: 1;
+}
+
+@media (max-width: 560px) {
+  .slot-row {
+    flex-wrap: wrap;
+  }
+  .slot-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+}

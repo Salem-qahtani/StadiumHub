@@ -1,0 +1,111 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-semibold);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: var(--transition-base);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-border);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* sizes */
+.btn-md {
+  font-size: var(--font-size-base);
+  padding: 11px 22px;
+}
+.btn-sm {
+  font-size: var(--font-size-sm);
+  padding: 7px 14px;
+}
+
+/* variants */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: var(--lift-md);
+  box-shadow: var(--shadow-green-glow);
+}
+
+.btn-secondary {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border-color: var(--color-accent-border);
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-accent-bg);
+  transform: var(--lift-sm);
+}
+
+.btn-danger {
+  background-color: var(--color-white);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  transform: var(--lift-sm);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text-subtle);
+}
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-accent-bg);
+  color: var(--color-primary);
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* loading spinner */
+.btn-loading {
+  cursor: progress;
+}
+.btn-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+  .btn-spinner {
+    animation-duration: 1.2s;
+  }
+}

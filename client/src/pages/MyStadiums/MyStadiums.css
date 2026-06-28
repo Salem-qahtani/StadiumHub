@@ -1,0 +1,167 @@
+.stadium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.stadium-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-shadow), transform 0.2s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+.stadium-card:hover {
+  box-shadow: var(--shadow-green-glow-soft);
+  transform: var(--lift-lg);
+}
+.stadium-card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-border);
+}
+
+.stadium-card-cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--color-surface-light);
+}
+.stadium-card-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.stadium-card-cover-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  background: var(--color-tint-green);
+}
+.stadium-card-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 3px 9px;
+  border-radius: var(--radius-badge);
+  background: rgba(10, 12, 10, 0.6);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stadium-card-body {
+  padding: var(--spacing-lg);
+  flex: 1;
+}
+
+.stadium-card-name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-heading);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-snug);
+}
+
+.stadium-card-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stadium-card-desc {
+  margin-top: var(--spacing-sm);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+  /* clamp to 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.stadium-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-top: var(--border-width) solid var(--color-border);
+  background: var(--color-surface-light);
+}
+
+.stadium-card-manage {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.stadium-card-manage:hover {
+  gap: 8px;
+  color: var(--color-primary-dark);
+}
+
+.stadium-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: var(--border-width) solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.icon-btn:hover {
+  border-color: var(--color-accent-border);
+  background: var(--color-accent-bg);
+  color: var(--color-primary);
+}
+.icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-border);
+}
+.icon-btn-danger:hover {
+  border-color: var(--color-danger);
+  background: rgba(211, 47, 47, 0.06);
+  color: var(--color-danger);
+}
+
+.stadium-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-form);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stadium-card:hover {
+    transform: none;
+  }
+}

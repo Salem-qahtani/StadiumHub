@@ -9,6 +9,7 @@ import slotRoutes from "./routes/slotRoutes.js";
 import reservationRoutes from "./routes/reservationRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import jwt from "jsonwebtoken";
 import { getUserConversation } from "./controllers/messageControllers.js";
 
@@ -63,6 +64,7 @@ app.use("/api/stadiums", slotRoutes);
 app.use("/api/reservations", reservationRoutes);
 app.use("/api/conversations", conversationRoutes);
 app.use("/api/conversations", messageRoutes);
+app.use("/api/uploads", uploadRoutes);
 
 // 404
 app.use((req, res) => {

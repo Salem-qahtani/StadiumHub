@@ -1,9 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../lib/prisma.js";
 
+function hasInvalidImages(images: unknown): boolean {
+  if (images === undefined) return false;
+  return (
+    !Array.isArray(images) ||
+    !images.every(
+      (url) =>
+        typeof url === "string" &&
+        url.startsWith("https://res.cloudinary.com/"),
+    )
+  );
+}
+
 async function createStadium(req: Request, res: Response, next: NextFunction) {
   try {
-    const { name, location, description } = req.body;
+    const { name, location, description, images } = req.body;
     const ownerId = req.userId;
 
     if (!ownerId) {
@@ -15,12 +27,18 @@ async function createStadium(req: Request, res: Response, next: NextFunction) {
     if (!name?.trim() || !location?.trim() || !description?.trim()) {
       return res.status(400).json({ error: "All fields are required" });
     }
+    if (hasInvalidImages(images)) {
+      return res
+        .status(400)
+        .json({ error: "images must be an array of Cloudinary URLs" });
+    }
 
     const stadium = await prisma.stadium.create({
       data: {
         name,
         location,
         description,
+        images: images ?? [],
         ownerId,
       },
     });
@@ -105,14 +123,22 @@ async function updateStadium(req: Request, res: Response, next: NextFunction) {
       return res.status(403).json({ error: "You can only edit your stadiums" });
     }
 
-    const { name, location, description } = req.body;
+    const { name, location, description, images } = req.body;
+
+    if (hasInvalidImages(images)) {
+      return res
+        .status(400)
+        .json({ error: "images must be an array of Cloudinary URLs" });
+    }
     const updated = await prisma.stadium.update({
       where: { id: stadium.id },
-      //only updates name, location, description not the whole req.body
+      // only updates name, location, description, images — not the whole req.body.
+      // images is replaced wholesale when provided; undefined leaves it unchanged.
       data: {
         name: name || stadium.name,
         location: location || stadium.location,
         description: description || stadium.description,
+        images: images === undefined ? stadium.images : images,
       },
     });
     return res.json(updated);
