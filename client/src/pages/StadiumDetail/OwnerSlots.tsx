@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Slot } from "../../types";
-import {
-  getOwnerSlots,
-  createSlot,
-  updateSlotStatus,
-  deleteSlot,
-} from "../../services/slots";
+import { getOwnerSlots, createSlot, deleteSlot } from "../../services/slots";
 import { getErrorMessage } from "../../services/error";
 import { useToast } from "../../components/ui/Toast/ToastContext";
 import Button from "../../components/ui/Button/Button";
@@ -39,7 +34,6 @@ function OwnerSlots({ stadiumId }: { stadiumId: number }) {
   const [formErrors, setFormErrors] = useState<SlotFormErrors>({});
   const [saving, setSaving] = useState(false);
 
-  const [busyIds, setBusyIds] = useState<number[]>([]);
   const [deleting, setDeleting] = useState<Slot | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -96,22 +90,6 @@ function OwnerSlots({ stadiumId }: { stadiumId: number }) {
       toast.error(getErrorMessage(err, "Couldn't add the slot."));
     } finally {
       setSaving(false);
-    }
-  }
-
-  async function toggleAvailable(slot: Slot) {
-    setBusyIds((prev) => [...prev, slot.id]);
-    try {
-      const updated = await updateSlotStatus(
-        stadiumId,
-        slot.id,
-        !slot.available,
-      );
-      setSlots((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
-    } catch (err) {
-      toast.error(getErrorMessage(err, "Couldn't update the slot."));
-    } finally {
-      setBusyIds((prev) => prev.filter((id) => id !== slot.id));
     }
   }
 
@@ -181,14 +159,6 @@ function OwnerSlots({ stadiumId }: { stadiumId: number }) {
                 {slot.available ? "Available" : "Booked"}
               </Badge>
               <div className="slot-actions">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  loading={busyIds.includes(slot.id)}
-                  onClick={() => toggleAvailable(slot)}
-                >
-                  {slot.available ? "Mark booked" : "Mark available"}
-                </Button>
                 <button
                   type="button"
                   className="icon-btn icon-btn-danger"

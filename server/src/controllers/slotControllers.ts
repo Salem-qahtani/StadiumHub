@@ -94,49 +94,6 @@ async function getOwnerSlots(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-async function updateSlotStatus(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    if (req.userRole !== "owner") {
-      return res.status(403).json({ error: "unauthrized access" });
-    }
-    const stadiumId = parseInt(req.params.stadiumId as string);
-    const slotId = parseInt(req.params.slotId as string);
-    const { available } = req.body;
-    const stadium = await prisma.stadium.findUnique({
-      where: { id: stadiumId },
-    });
-    if (!stadium) {
-      return res.status(404).json({ error: "Stadium not found" });
-    }
-    if (stadium.ownerId !== req.userId) {
-      return res.status(403).json({ error: "This is not your stadium" });
-    }
-    const slot = await prisma.slot.findUnique({
-      where: { id: slotId },
-    });
-    if (!slot) {
-      return res.status(404).json({ error: "Slot not found" });
-    }
-    if (slot.stadiumId !== stadiumId) {
-      return res
-        .status(403)
-        .json({ error: "Slot does not belong to this stadium" });
-    }
-    const updated = await prisma.slot.update({
-      where: { id: slotId },
-      data: {
-        available: available,
-      },
-    });
-    return res.json(updated);
-  } catch (error) {
-    next(error);
-  }
-}
 async function deleteSlot(req: Request, res: Response, next: NextFunction) {
   try {
     if (req.userRole !== "owner") {
@@ -172,4 +129,4 @@ async function deleteSlot(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-export { createSlot, getSlots, getOwnerSlots, updateSlotStatus, deleteSlot };
+export { createSlot, getSlots, getOwnerSlots, deleteSlot };

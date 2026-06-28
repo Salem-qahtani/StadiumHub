@@ -30,18 +30,6 @@ export async function createSlot(
   return data.slot;
 }
 
-export async function updateSlotStatus(
-  stadiumId: number,
-  slotId: number,
-  available: boolean,
-): Promise<Slot> {
-  const { data } = await api.put<Slot>(
-    `/stadiums/${stadiumId}/slots/${slotId}`,
-    { available },
-  );
-  return data;
-}
-
 export async function deleteSlot(
   stadiumId: number,
   slotId: number,

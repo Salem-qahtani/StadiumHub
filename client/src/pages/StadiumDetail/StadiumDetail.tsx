@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { AxiosError } from "axios";
 import type { Stadium } from "../../types";
 import { getStadium } from "../../services/stadiums";
 import { getErrorMessage } from "../../services/error";
@@ -28,19 +29,26 @@ function StadiumDetail() {
   const [stadium, setStadium] = useState<Stadium | null>(null);
   const [loading, setLoading] = useState(!invalid);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
-    if (invalid) return; // nothing to fetch; handled in render
+    if (invalid) return; // nothing to fetch; redirected in render
     let active = true;
     (async () => {
       try {
         const data = await getStadium(stadiumId);
         if (active) setStadium(data);
       } catch (err) {
-        if (active)
+        if (!active) return;
+        // A missing stadium is a 404 → send it to the error page. Other
+        // failures (network/500) stay here with a retry.
+        if (err instanceof AxiosError && err.response?.status === 404) {
+          setNotFound(true);
+        } else {
           setLoadError(getErrorMessage(err, "Couldn't load this stadium."));
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -62,6 +70,11 @@ function StadiumDetail() {
   const ownerNoAccess =
     isOwner && stadium !== null && stadium.ownerId !== user?.id;
 
+  // Bad link or missing stadium → 404; an owner on someone else's stadium → 403.
+  // Both render as standalone error pages, outside the dashboard layout.
+  if (invalid || notFound) return <Navigate to="/404" replace />;
+  if (ownerNoAccess) return <Navigate to="/403" replace />;
+
   return (
     <div className="stadium-detail">
       <button
@@ -73,22 +86,9 @@ function StadiumDetail() {
         {isOwner ? "My Stadiums" : "Browse"}
       </button>
 
-      {invalid && (
-        <EmptyState
-          icon={<StadiumIcon size={28} />}
-          title="Stadium not found"
-          message="That stadium link isn't valid."
-          action={
-            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
-              Go back
-            </Button>
-          }
-        />
-      )}
+      {loading && <Spinner label="Loading stadium…" />}
 
-      {!invalid && loading && <Spinner label="Loading stadium…" />}
-
-      {!invalid && !loading && loadError && (
+      {!loading && loadError && (
         <EmptyState
           icon={<StadiumIcon size={28} />}
           title="Something went wrong"
@@ -101,20 +101,7 @@ function StadiumDetail() {
         />
       )}
 
-      {!invalid && !loading && !loadError && ownerNoAccess && (
-        <EmptyState
-          icon={<StadiumIcon size={28} />}
-          title="This stadium isn't yours"
-          message="You can only view stadiums you own."
-          action={
-            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
-              Back to My Stadiums
-            </Button>
-          }
-        />
-      )}
-
-      {!invalid && !loading && !loadError && stadium && !ownerNoAccess && (
+      {!loading && !loadError && stadium && (
         <>
           <header className="detail-header">
             <h1 className="detail-name">{stadium.name}</h1>
