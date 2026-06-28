@@ -56,6 +56,12 @@ function StadiumDetail() {
     setReloadKey((k) => k + 1);
   }
 
+  // An owner may only manage stadiums they own. If they reach another owner's
+  // stadium (e.g. by editing the URL), block the view rather than rendering the
+  // management UI for it. Organizers can view any stadium (browse → detail).
+  const ownerNoAccess =
+    isOwner && stadium !== null && stadium.ownerId !== user?.id;
+
   return (
     <div className="stadium-detail">
       <button
@@ -95,7 +101,20 @@ function StadiumDetail() {
         />
       )}
 
-      {!invalid && !loading && !loadError && stadium && (
+      {!invalid && !loading && !loadError && ownerNoAccess && (
+        <EmptyState
+          icon={<StadiumIcon size={28} />}
+          title="This stadium isn't yours"
+          message="You can only view stadiums you own."
+          action={
+            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
+              Back to My Stadiums
+            </Button>
+          }
+        />
+      )}
+
+      {!invalid && !loading && !loadError && stadium && !ownerNoAccess && (
         <>
           <header className="detail-header">
             <h1 className="detail-name">{stadium.name}</h1>

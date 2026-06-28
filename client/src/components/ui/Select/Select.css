@@ -87,7 +87,8 @@
   cursor: pointer;
   transition: var(--transition-base);
 }
-.select-option:hover {
+.select-option:hover,
+.select-option.is-active {
   background: var(--color-tint-green);
   color: var(--color-primary);
 }

@@ -8,7 +8,20 @@ export function formatSlotDate(iso: string): string {
   });
 }
 
-// "09:00" + "10:30" -> "09:00 – 10:30"
+// Format a "HH:MM" 24h string as a locale-aware 12h time, e.g. "6:00 PM".
+// Locale stays adaptive (matches formatSlotDate) but the clock is always 12h.
+export function formatTime(time: string): string {
+  const [hours, minutes] = time.split(":").map(Number);
+  const d = new Date();
+  d.setHours(hours, minutes, 0, 0);
+  return d.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+// "09:00" + "10:30" -> "9:00 AM – 10:30 AM"
 export function formatTimeRange(start: string, end: string): string {
-  return `${start} – ${end}`;
+  return `${formatTime(start)} – ${formatTime(end)}`;
 }

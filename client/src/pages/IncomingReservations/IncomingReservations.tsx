@@ -31,15 +31,25 @@ const statusOptions: SelectOption<StatusFilter>[] = [
   { value: "cancelled", label: "Cancelled" },
 ];
 
-// Midnight today, used to split reservations into upcoming vs. past by slot date.
+// Local midnight today, used to split reservations into upcoming vs. past.
 function startOfToday(): number {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d.getTime();
 }
 
-function slotTime(reservation: Reservation): number {
-  return reservation.slot ? new Date(reservation.slot.date).getTime() : 0;
+// The slot's calendar day at local midnight. Slot dates arrive as UTC midnight
+// (date-only values), so read the UTC calendar parts and rebuild a local-midnight
+// timestamp — otherwise the day shifts by one in negative-UTC timezones and
+// today's slots get misclassified as past.
+function slotDayStart(reservation: Reservation): number {
+  if (!reservation.slot) return 0;
+  const d = new Date(reservation.slot.date);
+  return new Date(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate(),
+  ).getTime();
 }
 
 function IncomingReservations() {
@@ -117,7 +127,7 @@ function IncomingReservations() {
     let upcoming = 0;
     let past = 0;
     for (const r of reservations) {
-      if (slotTime(r) >= today) upcoming++;
+      if (slotDayStart(r) >= today) upcoming++;
       else past++;
     }
     return { upcoming, past };
@@ -126,7 +136,7 @@ function IncomingReservations() {
   const visible = useMemo(() => {
     const today = startOfToday();
     const filtered = reservations.filter((r) => {
-      const isUpcoming = slotTime(r) >= today;
+      const isUpcoming = slotDayStart(r) >= today;
       if (tab === "upcoming" ? !isUpcoming : isUpcoming) return false;
       if (status !== "all" && r.status !== status) return false;
       if (stadiumId !== "all" && r.slot?.stadium?.id !== stadiumId) return false;
@@ -135,8 +145,8 @@ function IncomingReservations() {
     // Upcoming: soonest first. Past: most recent first.
     filtered.sort((a, b) =>
       tab === "upcoming"
-        ? slotTime(a) - slotTime(b)
-        : slotTime(b) - slotTime(a),
+        ? slotDayStart(a) - slotDayStart(b)
+        : slotDayStart(b) - slotDayStart(a),
     );
     return filtered;
   }, [reservations, tab, status, stadiumId]);
@@ -180,7 +190,9 @@ function IncomingReservations() {
               <button
                 type="button"
                 role="tab"
+                id="resv-tab-upcoming"
                 aria-selected={tab === "upcoming"}
+                aria-controls="resv-tabpanel"
                 className={`resv-tab ${tab === "upcoming" ? "is-active" : ""}`}
                 onClick={() => setTab("upcoming")}
               >
@@ -190,7 +202,9 @@ function IncomingReservations() {
               <button
                 type="button"
                 role="tab"
+                id="resv-tab-past"
                 aria-selected={tab === "past"}
+                aria-controls="resv-tabpanel"
                 className={`resv-tab ${tab === "past" ? "is-active" : ""}`}
                 onClick={() => setTab("past")}
               >
@@ -215,6 +229,13 @@ function IncomingReservations() {
             </div>
           </div>
 
+          <div
+            role="tabpanel"
+            id="resv-tabpanel"
+            aria-labelledby={
+              tab === "upcoming" ? "resv-tab-upcoming" : "resv-tab-past"
+            }
+          >
           <p className="resv-count">
             {visible.length} {visible.length === 1 ? "reservation" : "reservations"}
           </p>
@@ -273,6 +294,7 @@ function IncomingReservations() {
               })}
             </ul>
           )}
+          </div>
         </>
       )}
     </div>
