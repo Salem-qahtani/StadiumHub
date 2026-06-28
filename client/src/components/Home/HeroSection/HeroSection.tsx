@@ -13,7 +13,7 @@ function HeroSection({ setIsSignIn }: HeroSectionProps) {
   const { isAuthenticated } = useAuth();
   function handleNavigate(dest: string) {
     if (isAuthenticated) {
-      navigate("/landing");
+      navigate("/dashboard");
       return;
     }
     if (dest === "sign-in") {

@@ -9,7 +9,7 @@ type ProtectedRouteProps = {
 function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) {
-    return <Navigate to="/Sign" replace />;
+    return <Navigate to="/sign" replace />;
   }
   return <>{children}</>;
 }

@@ -39,6 +39,10 @@ export function handleUpload(req: Request, res: Response, next: NextFunction) {
       //fileFilter rejection ("Only image files are allowed")
       return res.status(400).json({ error: err.message });
     }
+    if (err) {
+      // unknown error shape — let the global error handler deal with it
+      return next(err);
+    }
     next(); // no error → continue to the controller
   });
 }

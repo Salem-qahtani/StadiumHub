@@ -52,7 +52,7 @@ function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
         const { user, token } = response.data;
         login(user, token);
         resetForm();
-        navigate("/landing");
+        navigate("/dashboard");
       } catch (err) {
         const error = err as ApiError;
         setErrors({ submit: error.response?.data?.error || "sign in failed" });

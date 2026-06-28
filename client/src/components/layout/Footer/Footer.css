@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  padding: 10px 150px;
+}
+
+/* dark page bg → light text (background comes from the per-page `bg` prop) */
+.footer.dark {
+  color: rgba(210, 210, 210, 0.727);
+}
+
+/* light page bg → dark muted text + subtle separator */
+.footer.light {
+  color: var(--color-text-subtle);
+  border-top: var(--border-width) solid var(--color-border);
+}

@@ -5,7 +5,11 @@ import { getErrorMessage } from "../../services/error";
 import { useToast } from "../../components/ui/Toast/ToastContext";
 import PageHeader from "../../components/ui/PageHeader/PageHeader";
 import Button from "../../components/ui/Button/Button";
-import { TextField, TextArea, FieldGroup } from "../../components/ui/Field/Field";
+import {
+  TextField,
+  TextArea,
+  FieldGroup,
+} from "../../components/ui/Field/Field";
 import ImageUploader from "../../components/ui/ImageUploader/ImageUploader";
 import { ChevronLeftIcon } from "../../components/ui/icons";
 import "./AddStadium.css";
@@ -48,7 +52,7 @@ function AddStadium() {
         images,
       });
       toast.success(`"${stadium.name}" created.`);
-      navigate(`/landing/stadiums/${stadium.id}`);
+      navigate(`/dashboard/stadiums/${stadium.id}`);
     } catch (err) {
       toast.error(getErrorMessage(err, "Couldn't create the stadium."));
     } finally {
@@ -60,7 +64,7 @@ function AddStadium() {
     <div className="add-stadium">
       <button
         className="back-link"
-        onClick={() => navigate("/landing")}
+        onClick={() => navigate("/dashboard")}
         type="button"
       >
         <ChevronLeftIcon size={18} />
@@ -100,7 +104,10 @@ function AddStadium() {
           placeholder="Full-size natural grass pitch with floodlights, changing rooms, and parking."
         />
 
-        <FieldGroup label="Photos" hint="Optional. Up to 6 images, max 5MB each.">
+        <FieldGroup
+          label="Photos"
+          hint="Optional. Up to 6 images, max 5MB each."
+        >
           <ImageUploader onChange={setImages} onBusyChange={setImagesBusy} />
         </FieldGroup>
 
@@ -108,11 +115,12 @@ function AddStadium() {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => navigate("/landing")}
+            onClick={() => navigate("/dashboard")}
             disabled={saving}
           >
             Cancel
           </Button>
+
           <Button type="submit" loading={saving} disabled={imagesBusy}>
             {imagesBusy ? "Uploading photos…" : "Create stadium"}
           </Button>

@@ -31,7 +31,7 @@ api.interceptors.response.use(
       // Expired/invalid token on a protected route — clear session and redirect
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "/Sign";
+      window.location.href = "/sign";
     }
     return Promise.reject(error);
   },

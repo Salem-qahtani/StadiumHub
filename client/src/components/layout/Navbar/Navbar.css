@@ -3,13 +3,10 @@
   color: rgba(255, 255, 255, 0.697);
   user-select: none;
 }
-.navbar h3 {
-  font-size: 1.2em;
+.nav-username {
+  font-size: 1em;
+  font-weight: 600;
   font-family: Arial, Helvetica, sans-serif;
-}
-.navbar h3::selection {
-  background-color: var(--color-primary-light);
-  color: black;
 }
 .nav-buttons-logout {
   display: flex;
@@ -42,13 +39,6 @@
   cursor: pointer;
 }
 .nav-links a:hover {
-  color: rgba(255, 255, 255, 0.918);
-}
-.home-link {
-  font-weight: 600;
-  font-size: 1.2em;
-}
-.home-link:hover {
   color: rgba(255, 255, 255, 0.918);
 }
 .nav-buttons {

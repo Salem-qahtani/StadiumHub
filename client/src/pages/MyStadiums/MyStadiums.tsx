@@ -147,7 +147,7 @@ function MyStadiums() {
         action={
           <Button
             iconLeft={<PlusIcon size={18} />}
-            onClick={() => navigate("/landing/stadiums/new")}
+            onClick={() => navigate("/dashboard/stadiums/new")}
           >
             Add stadium
           </Button>
@@ -177,7 +177,7 @@ function MyStadiums() {
           action={
             <Button
               iconLeft={<PlusIcon size={18} />}
-              onClick={() => navigate("/landing/stadiums/new")}
+              onClick={() => navigate("/dashboard/stadiums/new")}
             >
               Add stadium
             </Button>
@@ -194,11 +194,11 @@ function MyStadiums() {
               role="button"
               tabIndex={0}
               aria-label={`View ${stadium.name}`}
-              onClick={() => navigate(`/landing/stadiums/${stadium.id}`)}
+              onClick={() => navigate(`/dashboard/stadiums/${stadium.id}`)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  navigate(`/landing/stadiums/${stadium.id}`);
+                  navigate(`/dashboard/stadiums/${stadium.id}`);
                 }
               }}
             >
@@ -235,7 +235,7 @@ function MyStadiums() {
                   className="stadium-card-manage"
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate(`/landing/stadiums/${stadium.id}`);
+                    navigate(`/dashboard/stadiums/${stadium.id}`);
                   }}
                 >
                   Manage slots

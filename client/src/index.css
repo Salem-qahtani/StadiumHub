@@ -216,3 +216,14 @@ input:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px var(--color-primary-light);
 }
+
+/*
+  ----------------------------------------------------------------------------
+  9. GLOBAL TEXT SELECTION
+  Green highlight site-wide (turf green bg, black text).
+  ----------------------------------------------------------------------------
+*/
+::selection {
+  background-color: var(--color-primary-light);
+  color: black;
+}

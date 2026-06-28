@@ -29,7 +29,7 @@ function ForCard({
   const { isAuthenticated } = useAuth();
   function handleNavigate(role: string) {
     if (isAuthenticated) {
-      navigate("/landing");
+      navigate("/dashboard");
       return;
     }
     setIsSignIn(false);

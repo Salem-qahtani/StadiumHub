@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import type { Dispatch, SetStateAction } from "react";
 
@@ -26,22 +26,20 @@ function Navbar({ setIsSignIn }: NavbarProps) {
         <div className="nav-logo">
           <a href="#hero">⚽ StadiumHub</a>
         </div>
-        {isAuthenticated ? (
-          <div className="nav-links home">
-            <NavLink to="/landing" className="home-link">
-              Home Page
-            </NavLink>
-          </div>
-        ) : (
-          <div className="nav-links">
-            <a href="#howItWork">How it works</a>
-            <a href="#builtFor">For you</a>
-            <a href="#hero">About</a>
-          </div>
-        )}
+        <div className="nav-links">
+          <a href="#howItWork">How it works</a>
+          <a href="#builtFor">For you</a>
+          <a href="#hero">About</a>
+        </div>
         {isAuthenticated ? (
           <div className="nav-buttons-logout">
-            <h3>{user?.username}</h3>
+            <span className="nav-username">{user?.username}</span>
+            <button
+              className="green-button"
+              onClick={() => navigate("/dashboard")}
+            >
+              Go to Dashboard <i className="fa-solid fa-arrow-right"></i>
+            </button>
             <button className="black-button" onClick={logout}>
               Log out
             </button>

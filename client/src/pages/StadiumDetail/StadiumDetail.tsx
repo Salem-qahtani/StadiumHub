@@ -60,7 +60,7 @@ function StadiumDetail() {
     <div className="stadium-detail">
       <button
         className="back-link"
-        onClick={() => navigate("/landing")}
+        onClick={() => navigate("/dashboard")}
         type="button"
       >
         <ChevronLeftIcon size={18} />
@@ -73,7 +73,7 @@ function StadiumDetail() {
           title="Stadium not found"
           message="That stadium link isn't valid."
           action={
-            <Button variant="secondary" onClick={() => navigate("/landing")}>
+            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
               Go back
             </Button>
           }

@@ -1,10 +1,16 @@
 .Sign-page {
   display: flex;
   flex-direction: column;
+  background-color: rgba(223, 234, 221, 0.645);
+  min-height: 100vh;
+}
+.sign-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(223, 234, 221, 0.645);
-  height: 100vh;
+  width: 100%;
 }
 .forms-container {
   position: relative;

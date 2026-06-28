@@ -3,7 +3,7 @@ import HeroSection from "../../components/Home/HeroSection/HeroSection";
 import HowItWork from "../../components/Home/HowItWork/HowItWork";
 import BuiltFor from "../../components/Home/BuiltFor/BuiltFor";
 import StatCards from "../../components/Home/StatCards/StatCards";
-import Footer from "../../components/Home/Footer/Footer";
+import Footer from "../../components/layout/Footer/Footer";
 import type { Dispatch, SetStateAction } from "react";
 
 type HomeProps = {
@@ -19,7 +19,7 @@ function Home({ setIsSignIn }: HomeProps) {
       <StatCards />
       <HowItWork />
       <BuiltFor setIsSignIn={setIsSignIn} />
-      <Footer />
+      <Footer bg="#000000" variant="dark" />
     </div>
   );
 }

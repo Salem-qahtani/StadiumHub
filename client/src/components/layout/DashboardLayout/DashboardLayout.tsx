@@ -10,6 +10,7 @@ import {
   MenuIcon,
   XIcon,
 } from "../../ui/icons";
+import Footer from "../Footer/Footer";
 import "./DashboardLayout.css";
 
 type NavItem = { to: string; label: string; icon: React.ReactNode; end?: boolean };
@@ -23,18 +24,18 @@ function DashboardLayout() {
 
   const navItems: NavItem[] = [
     {
-      to: "/landing",
+      to: "/dashboard",
       label: isOwner ? "My Stadiums" : "Browse Stadiums",
       icon: isOwner ? <StadiumIcon size={20} /> : <SearchIcon size={20} />,
       end: true,
     },
     {
-      to: "/landing/reservations",
+      to: "/dashboard/reservations",
       label: isOwner ? "Reservations" : "My Reservations",
       icon: <TicketIcon size={20} />,
     },
     {
-      to: "/landing/messages",
+      to: "/dashboard/messages",
       label: "Messages",
       icon: <MessageIcon size={20} />,
     },
@@ -82,10 +83,10 @@ function DashboardLayout() {
         <div className="dash-user">
           <div className="dash-user-info">
             <span className="dash-avatar" aria-hidden="true">
-              {user?.name?.charAt(0).toUpperCase() ?? "?"}
+              {user?.username?.charAt(0).toUpperCase() ?? "?"}
             </span>
             <div className="dash-user-text">
-              <span className="dash-user-name">{user?.name}</span>
+              <span className="dash-user-name">{user?.username}</span>
               <span className="dash-user-role">{user?.role}</span>
             </div>
           </div>
@@ -114,6 +115,7 @@ function DashboardLayout() {
         <main className="dash-content">
           <Outlet />
         </main>
+        <Footer bg="var(--color-bg)" variant="light" />
       </div>
     </div>
   );

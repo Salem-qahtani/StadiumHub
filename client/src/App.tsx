@@ -16,11 +16,11 @@ function App() {
     <Routes>
       <Route index element={<Home setIsSignIn={setIsSignIn} />} />
       <Route
-        path="/Sign"
+        path="/sign"
         element={<Sign isSignIn={isSignIn} setIsSignIn={setIsSignIn} />}
       />
       <Route
-        path="/landing"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <DashboardLayout />
@@ -41,7 +41,7 @@ function App() {
           element={
             <RoleSwitch
               owner={<AddStadium />}
-              organizer={<Navigate to="/landing" replace />}
+              organizer={<Navigate to="/dashboard" replace />}
             />
           }
         />

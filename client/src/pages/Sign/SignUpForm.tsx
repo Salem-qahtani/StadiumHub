@@ -96,7 +96,7 @@ function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
         const { user, token } = response.data;
         resetForm();
         login(user, token);
-        navigate("/landing");
+        navigate("/dashboard");
       } catch (err) {
         const error = err as ApiError;
         setErrors({ submit: error.response?.data?.error || "Signup failed" });
