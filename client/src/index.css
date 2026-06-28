@@ -17,6 +17,12 @@ body {
   scroll-padding: 50px;
 }
 
+/* Always reserve the scrollbar gutter so content doesn't shift horizontally
+   between views that scroll and ones that don't (e.g. Reservations tabs). */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg);

@@ -1,5 +1,6 @@
 .add-stadium {
   max-width: 600px;
+  margin-inline: auto;
 }
 
 .back-link {

@@ -9,6 +9,7 @@ import ComingSoon from "./components/routing/ComingSoon";
 import MyStadiums from "./pages/MyStadiums/MyStadiums";
 import AddStadium from "./pages/AddStadium/AddStadium";
 import StadiumDetail from "./pages/StadiumDetail/StadiumDetail";
+import IncomingReservations from "./pages/IncomingReservations/IncomingReservations";
 
 function App() {
   const [isSignIn, setIsSignIn] = useState<boolean | null>(false);
@@ -46,7 +47,15 @@ function App() {
           }
         />
         <Route path="stadiums/:id" element={<StadiumDetail />} />
-        <Route path="reservations" element={<ComingSoon title="Reservations" />} />
+        <Route
+          path="reservations"
+          element={
+            <RoleSwitch
+              owner={<IncomingReservations />}
+              organizer={<ComingSoon title="My Reservations" />}
+            />
+          }
+        />
         <Route path="messages" element={<ComingSoon title="Messages" />} />
       </Route>
     </Routes>

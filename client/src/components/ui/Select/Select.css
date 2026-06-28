@@ -1,0 +1,106 @@
+.select {
+  position: relative;
+  display: inline-block;
+}
+
+.select-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.select-trigger:hover {
+  border-color: var(--color-accent-border);
+}
+.select-trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-accent-border);
+  box-shadow: 0 0 0 3px var(--color-accent-border);
+}
+
+.select-label {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.select-value {
+  color: var(--color-text-heading);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+.select-caret {
+  display: inline-flex;
+  margin-left: 2px;
+  color: var(--color-text-subtle);
+  transition: transform 0.18s ease;
+}
+.select-caret.is-open {
+  transform: rotate(180deg);
+}
+
+.select-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 100%;
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 6px;
+  background: var(--color-white);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  animation: select-pop 0.12s ease;
+}
+@keyframes select-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-body);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+.select-option:hover {
+  background: var(--color-tint-green);
+  color: var(--color-primary);
+}
+.select-option.is-selected {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+.select-option.is-selected .select-option-label {
+  color: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .select-menu {
+    animation: none;
+  }
+}
