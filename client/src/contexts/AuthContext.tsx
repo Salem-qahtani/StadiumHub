@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { disconnectSocket } from "../services/socket";
 
 type User = {
   id: number;
@@ -35,6 +36,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
+    disconnectSocket();
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");

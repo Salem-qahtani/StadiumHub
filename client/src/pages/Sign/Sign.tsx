@@ -49,8 +49,16 @@ function Sign({ isSignIn, setIsSignIn }: SignProps) {
               {isSignIn ? "Register Now" : "Log In Now"}
             </button>
           </div>
-          <SignInForm isSignIn={isSignIn} isSliding={isSliding} />
-          <SignUpForm isSignIn={isSignIn} isSliding={isSliding} />
+          <SignInForm
+            isSignIn={isSignIn}
+            isSliding={isSliding}
+            onToggle={handleSlide}
+          />
+          <SignUpForm
+            isSignIn={isSignIn}
+            isSliding={isSliding}
+            onToggle={handleSlide}
+          />
         </div>
       </div>
       <Footer bg="rgba(223, 234, 221, 0.645)" variant="light" />

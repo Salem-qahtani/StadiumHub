@@ -9,8 +9,16 @@ async function createSlot(req: Request, res: Response, next: NextFunction) {
     if (req.userRole !== "owner") {
       return res.status(403).json({ error: "only owners can add slots" });
     }
-    if (!date?.trim() || !startTime.trim() || !endTime.trim()) {
+    if (!date?.trim() || !startTime?.trim() || !endTime?.trim()) {
       return res.status(400).json({ error: "all fields are required" });
+    }
+    if (isNaN(Date.parse(date))) {
+      return res.status(400).json({ error: "invalid date" });
+    }
+    if (startTime >= endTime) {
+      return res
+        .status(400)
+        .json({ error: "startTime must be before endTime" });
     }
     const stadium = await prisma.stadium.findUnique({
       where: { id: stadiumId },

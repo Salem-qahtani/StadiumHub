@@ -5,12 +5,13 @@ import Sign from "./pages/Sign/Sign";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import DashboardLayout from "./components/layout/DashboardLayout/DashboardLayout";
 import RoleSwitch from "./components/routing/RoleSwitch";
-import ComingSoon from "./components/routing/ComingSoon";
 import MyStadiums from "./pages/MyStadiums/MyStadiums";
 import BrowseStadiums from "./pages/BrowseStadiums/BrowseStadiums";
 import AddStadium from "./pages/AddStadium/AddStadium";
 import StadiumDetail from "./pages/StadiumDetail/StadiumDetail";
 import IncomingReservations from "./pages/IncomingReservations/IncomingReservations";
+import MyReservations from "./pages/MyReservations/MyReservations";
+import Messages from "./pages/Messages/Messages";
 import ErrorPage from "./pages/Error/ErrorPage";
 
 function App() {
@@ -54,11 +55,11 @@ function App() {
           element={
             <RoleSwitch
               owner={<IncomingReservations />}
-              organizer={<ComingSoon title="My Reservations" />}
+              organizer={<MyReservations />}
             />
           }
         />
-        <Route path="messages" element={<ComingSoon title="Messages" />} />
+        <Route path="messages" element={<Messages />} />
         {/* unknown /dashboard/* path → 404 (otherwise renders a blank layout) */}
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Route>

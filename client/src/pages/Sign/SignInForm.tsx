@@ -7,6 +7,7 @@ import api from "../../services/api";
 type SignInFormProps = {
   isSignIn: boolean | null;
   isSliding: boolean;
+  onToggle: () => void;
 };
 
 type SignInErrors = {
@@ -22,7 +23,7 @@ type ApiError = {
   };
 };
 
-function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
+function SignInForm({ isSignIn, isSliding, onToggle }: SignInFormProps) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<SignInErrors>({});
@@ -96,6 +97,12 @@ function SignInForm({ isSignIn, isSliding }: SignInFormProps) {
       <button className="form-button" disabled={loading}>
         {loading ? "SIGNING IN..." : "SIGN IN"}
       </button>
+      <p className="form-toggle">
+        Don't have an account?{" "}
+        <button type="button" className="form-toggle-btn" onClick={onToggle}>
+          Sign up
+        </button>
+      </p>
     </form>
   );
 }

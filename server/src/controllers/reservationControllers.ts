@@ -89,23 +89,28 @@ async function cancelReservation(
         .status(403)
         .json({ error: "You can only cancel your reservations" });
     }
-    if (reservation.status === "cancelled") {
-      return res.status(400).json({ error: "Reservation already cancelled" });
-    }
 
-    // cancel + free the slot atomically so we never leave a cancelled
-    // reservation with its slot still marked unavailable
+    // Cancel + free the slot atomically. The status claim is done INSIDE the
+    // transaction with updateMany({ status: "confirmed" }) so a concurrent
+    // cancel can't both pass an outside check and each free the slot — which
+    // could free a slot another organizer has since re-booked (double-book).
     const cancelled = await prisma.$transaction(async (tx) => {
-      const updated = await tx.reservation.update({
-        where: { id: id },
+      const claim = await tx.reservation.updateMany({
+        where: { id, status: "confirmed" },
         data: { status: "cancelled" },
       });
+      if (claim.count === 0) {
+        return null; // already cancelled / lost the race — don't free the slot
+      }
       await tx.slot.update({
         where: { id: reservation.slotId },
         data: { available: true },
       });
-      return updated;
+      return tx.reservation.findUnique({ where: { id } });
     });
+    if (!cancelled) {
+      return res.status(400).json({ error: "Reservation already cancelled" });
+    }
     return res.json({
       message: "reservation cancelled",
       reservation: cancelled,

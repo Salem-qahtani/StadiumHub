@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import {
   StadiumIcon,
@@ -21,6 +21,7 @@ function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isOwner = user?.role === "owner";
+  const isMessages = useLocation().pathname.startsWith("/dashboard/messages");
 
   const navItems: NavItem[] = [
     {
@@ -112,10 +113,10 @@ function DashboardLayout() {
           </button>
           <span className="dash-topbar-brand">StadiumHub</span>
         </header>
-        <main className="dash-content">
+        <main className={`dash-content ${isMessages ? "is-flush" : ""}`}>
           <Outlet />
         </main>
-        <Footer bg="var(--color-bg)" variant="light" />
+        {!isMessages && <Footer bg="var(--color-bg)" variant="light" />}
       </div>
     </div>
   );

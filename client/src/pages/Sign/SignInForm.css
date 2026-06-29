@@ -63,3 +63,49 @@
 .sliding .form-button {
   pointer-events: none;
 }
+
+/* mobile-only toggle between Sign In / Sign Up (the sliding cover is hidden) */
+.form-toggle {
+  display: none;
+}
+.form-toggle-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .form-hide {
+    display: none;
+  }
+  .form-show {
+    opacity: 1;
+  }
+  .form {
+    padding: 32px 22px;
+  }
+  .form-header {
+    font-size: 1.5em;
+  }
+  .form-toggle {
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+    color: #555;
+    font-size: 0.95em;
+  }
+  /* The cover (and its slide) is hidden on mobile, so the 800ms `isSliding`
+     window has no animation — don't dead-lock the revealed form's controls. */
+  .sliding,
+  .sliding input,
+  .sliding .form-button,
+  .sliding .form-toggle-btn {
+    pointer-events: auto;
+    cursor: auto;
+  }
+}

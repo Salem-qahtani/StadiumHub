@@ -9,6 +9,7 @@ import api from "../../services/api";
 type SignUpFormProps = {
   isSignIn: boolean | null;
   isSliding: boolean;
+  onToggle: () => void;
 };
 
 type SignUpErrors = {
@@ -26,7 +27,7 @@ type ApiError = {
   };
 };
 
-function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
+function SignUpForm({ isSignIn, isSliding, onToggle }: SignUpFormProps) {
   const location = useLocation();
   const preSelectedRole = location.state?.role ?? "organizer";
   const [role, setRole] = useState<string>(preSelectedRole);
@@ -179,6 +180,12 @@ function SignUpForm({ isSignIn, isSliding }: SignUpFormProps) {
       <button className="form-button" disabled={loading}>
         {loading ? "SIGNING UP..." : "SIGN UP"}
       </button>
+      <p className="form-toggle">
+        Already have an account?{" "}
+        <button type="button" className="form-toggle-btn" onClick={onToggle}>
+          Sign in
+        </button>
+      </p>
     </form>
   );
 }

@@ -1,6 +1,8 @@
 .footer {
   display: flex;
-  padding: 10px 150px;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px clamp(20px, 8vw, 150px);
 }
 
 /* dark page bg → light text (background comes from the per-page `bg` prop) */

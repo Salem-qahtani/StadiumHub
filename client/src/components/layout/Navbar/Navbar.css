@@ -20,7 +20,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 15px 150px;
+  padding: 15px clamp(20px, 8vw, 150px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,4 +88,67 @@
 }
 .navbar .green-button i {
   transition: var(--transition-base);
+}
+
+/* Wrapper around the links + auth buttons. `display: contents` makes it a no-op
+   on desktop so its children stay direct flex items of .navbar (layout
+   unchanged); on mobile it becomes the dropdown panel. */
+.nav-collapse {
+  display: contents;
+}
+.nav-hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ---- Responsive: hamburger dropdown ---- */
+@media (max-width: 900px) {
+  .nav-hamburger {
+    display: inline-flex;
+  }
+  /* navbar is position:fixed, so top:100% drops the panel right below the bar */
+  .nav-collapse {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    background: black;
+    padding: 20px clamp(20px, 8vw, 150px) 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .nav-collapse.is-open {
+    display: flex;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .nav-buttons,
+  .nav-buttons-logout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .nav-username {
+    text-align: center;
+  }
+  .navbar .black-button,
+  .navbar .green-button {
+    justify-content: center;
+    width: 100%;
+  }
+  .nav-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(10, 12, 10, 0.5);
+  }
 }

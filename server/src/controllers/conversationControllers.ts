@@ -1,14 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../lib/prisma.js";
 
-async function getUserConversation(conversationId: number, userId: number) {
-  return prisma.conversation.findFirst({
-    where: {
-      id: conversationId,
-      OR: [{ organizerId: userId }, { ownerId: userId }],
-    },
-  });
-}
 async function startConversation(
   req: Request,
   res: Response,
@@ -44,6 +36,7 @@ async function startConversation(
           organizerId: userId!,
           ownerId: ownerId,
         },
+        include: { owner: { select: { name: true, username: true } } },
       });
       return res.status(200).json(conversation);
     } //owner rules :
@@ -69,6 +62,7 @@ async function startConversation(
             ownerId: userId!,
           },
         },
+        include: { organizer: { select: { name: true, username: true } } },
       });
       if (exist) {
         return res.json(exist);
@@ -117,6 +111,7 @@ async function startConversation(
           organizerId: organizerId,
           ownerId: userId!,
         },
+        include: { organizer: { select: { name: true, username: true } } },
       });
       return res.status(200).json(conversation);
     } // user role is not organizer or owner
@@ -140,7 +135,7 @@ async function getMyConversations(
     const userRole = req.userRole;
     if (userRole === "owner") {
       const conversations = await prisma.conversation.findMany({
-        where: { ownerId: userId },
+        where: { ownerId: userId, messages: { some: {} } },
         include: {
           organizer: { select: { name: true, username: true } },
           messages: {
@@ -152,7 +147,7 @@ async function getMyConversations(
       return res.json(conversations);
     } else if (userRole === "organizer") {
       const conversations = await prisma.conversation.findMany({
-        where: { organizerId: userId },
+        where: { organizerId: userId, messages: { some: {} } },
         include: {
           owner: { select: { name: true, username: true } },
           messages: {

@@ -45,7 +45,7 @@ There is no root-level package — run all commands from inside `server/` or `cl
 - `src/socket.ts` holds a module-level `io` singleton: `initSocket(httpServer)` creates it, `getIO()` retrieves it elsewhere. `src/index.ts` creates a raw `http.Server`, calls `initSocket`, and Socket.IO and Express share that server.
 - Socket auth mirrors the REST layer: an `io.use` middleware verifies `socket.handshake.auth.token` (same JWT) and populates `socket.data.userId/username/userRole`.
 - Clients emit `joinConversation` with a conversation id; the server authorizes via `getUserConversation(conversationId, userId)` (a membership check exported from `messageControllers.ts`) before joining the `conversation:<id>` room.
-- This feature is mid-build — emitting message events into rooms from `sendMessage` is the in-progress work. See the memory note `messaging-socketio-plan.md`.
+- This feature is COMPLETE: `sendMessage` persists then emits `newMessage` into `conversation:<id>`; the client has a full realtime chat (`pages/Messages/`, `services/socket.ts`). Conversations are hidden from the inbox until they have ≥1 message (`getMyConversations` filters `messages: { some: {} }`); a brand-new conversation is deep-linked with `{ conversationId, peerName }` via router state.
 
 ### Frontend
 - **Auth state** lives in `contexts/AuthContext.tsx` (`useAuth` hook). The user object and token are persisted to `localStorage` and rehydrated on load; `isAuthenticated` gates `ProtectedRoute`.
@@ -55,3 +55,9 @@ There is no root-level package — run all commands from inside `server/` or `cl
 
 ## Data model (`server/prisma/schema.prisma`)
 `User` (role: owner|organizer) → owns `Stadium[]` → has `Slot[]` (date + start/end time strings + `available` flag) → has `Reservation[]` (status: confirmed|cancelled). Messaging: `Conversation` links one organizer + one owner and has `Message[]` (with `read` flag). Deleting a stadium/slot cascades to its slots/reservations/messages; conversation participants use `onDelete: Restrict`.
+
+## Current status (2026-06-29)
+All client pages (owner O1–O4, organizer G1–G3, messaging S1) and the realtime messaging feature are built. A full QA + code-review + security pass was completed; fixes applied include the `formatSlotDate` UTC off-by-one, a `cancelReservation` TOCTOU race (status claim now inside the `$transaction`), an SVG-XSS upload allowlist, JWT `algorithms:["HS256"]` pinning, `express-rate-limit` (auth 10/15min + global 300/15min), and assorted input validation. Server boot now fails fast if `FRONTEND_URL` is unset. **Remaining before done:** user runs a 2-session realtime e2e test, then commit (work is currently uncommitted). A few low-priority nits are knowingly deferred (see memory `pre-commit-review-2026-06-29.md`).
+
+## Deployment (planned: Railway)
+Not deployed yet. At deploy time: **uncomment `app.set("trust proxy", 1)` in `server/src/index.ts`** (required for correct per-IP rate limiting behind Railway's edge proxy — never use `true`). Set Railway env vars: `DATABASE_URL`, `JWT_SECRET`, `PORT`, `FRONTEND_URL`, `CLOUDINARY_URL`. The client API base is hard-coded to `http://localhost:3000/api` in `client/src/services/api.ts` and must be pointed at the deployed API URL. See memory `deployment-railway-todo.md`.

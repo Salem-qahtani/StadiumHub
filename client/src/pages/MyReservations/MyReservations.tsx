@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Reservation, ReservationStatus } from "../../types";
-import { getOwnerReservations } from "../../services/reservations";
+import {
+  getMyReservations,
+  cancelReservation,
+} from "../../services/reservations";
 import { startConversation } from "../../services/conversations";
 import { getErrorMessage } from "../../services/error";
 import { useToast } from "../../components/ui/Toast/ToastContext";
@@ -12,15 +15,16 @@ import EmptyState from "../../components/ui/EmptyState/EmptyState";
 import Badge from "../../components/ui/Badge/Badge";
 import Select from "../../components/ui/Select/Select";
 import type { SelectOption } from "../../components/ui/Select/Select";
+import ConfirmDialog from "../../components/ui/ConfirmDialog/ConfirmDialog";
 import {
   TicketIcon,
   ClockIcon,
-  UserIcon,
-  MessageIcon,
+  MapPinIcon,
   StadiumIcon,
+  MessageIcon,
 } from "../../components/ui/icons";
 import { formatSlotDate, formatTimeRange } from "../../utils/format";
-import "./IncomingReservations.css";
+import "./MyReservations.css";
 
 type Tab = "upcoming" | "past";
 type StatusFilter = "all" | ReservationStatus;
@@ -52,7 +56,7 @@ function slotDayStart(reservation: Reservation): number {
   ).getTime();
 }
 
-function IncomingReservations() {
+function MyReservations() {
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -60,17 +64,22 @@ function IncomingReservations() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
-  const [messagingId, setMessagingId] = useState<number | null>(null);
 
   const [tab, setTab] = useState<Tab>("upcoming");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [stadiumId, setStadiumId] = useState<number | "all">("all");
 
+  // Cancel confirmation
+  const [pendingCancel, setPendingCancel] = useState<Reservation | null>(null);
+  const [cancelling, setCancelling] = useState(false);
+  // Reservation whose "Message owner" request is in flight.
+  const [messagingId, setMessagingId] = useState<number | null>(null);
+
   useEffect(() => {
     let active = true;
     (async () => {
       try {
-        const data = await getOwnerReservations();
+        const data = await getMyReservations();
         if (active) setReservations(data);
       } catch (err) {
         if (active)
@@ -90,20 +99,43 @@ function IncomingReservations() {
     setReloadKey((k) => k + 1);
   }
 
-  async function messageOrganizer(reservation: Reservation) {
+  // Open (or reuse) the conversation with this booking's stadium owner.
+  async function messageOwner(reservation: Reservation) {
     if (messagingId !== null) return; // a message request is already in flight
+    const ownerId = reservation.slot?.stadium?.ownerId;
+    if (!ownerId) return;
     setMessagingId(reservation.id);
     try {
-      const conv = await startConversation({
-        organizerId: reservation.organizerId,
-      });
+      const conv = await startConversation({ ownerId });
       navigate("/dashboard/messages", {
-        state: { conversationId: conv.id, peerName: conv.organizer?.username },
+        state: { conversationId: conv.id, peerName: conv.owner?.username },
       });
     } catch (err) {
       toast.error(getErrorMessage(err, "Couldn't open the conversation."));
     } finally {
       setMessagingId(null);
+    }
+  }
+
+  async function confirmCancel() {
+    if (!pendingCancel) return;
+    const target = pendingCancel;
+    setCancelling(true);
+    try {
+      const updated = await cancelReservation(target.id);
+      // reflect the cancellation locally (status flips, slot is freed server-side)
+      setReservations((prev) =>
+        prev.map((r) =>
+          r.id === target.id ? { ...r, status: updated.status } : r,
+        ),
+      );
+      toast.success("Reservation cancelled.");
+      setPendingCancel(null);
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Couldn't cancel this reservation."));
+      setPendingCancel(null);
+    } finally {
+      setCancelling(false);
     }
   }
 
@@ -125,8 +157,8 @@ function IncomingReservations() {
     [stadiums],
   );
 
-  // Counts for the Upcoming / Past tab labels (status + stadium filters don't
-  // affect these so the tabs always reflect the full split).
+  // Counts for the Upcoming / Past tab labels (the other filters don't affect
+  // these so the tabs always reflect the full split).
   const tabCounts = useMemo(() => {
     const today = startOfToday();
     let upcoming = 0;
@@ -159,13 +191,13 @@ function IncomingReservations() {
   const hasReservations = reservations.length > 0;
 
   return (
-    <div className="incoming-reservations">
+    <div className="my-reservations">
       <PageHeader
-        title="Reservations"
-        subtitle="Every booking organizers have made across your stadiums."
+        title="My Reservations"
+        subtitle="Every slot you've booked across stadiums."
       />
 
-      {loading && <Spinner label="Loading reservations…" />}
+      {loading && <Spinner label="Loading your reservations…" />}
 
       {!loading && loadError && (
         <EmptyState
@@ -184,7 +216,12 @@ function IncomingReservations() {
         <EmptyState
           icon={<TicketIcon size={28} />}
           title="No reservations yet"
-          message="When organizers book your stadium slots, their reservations will show up here."
+          message="Browse stadiums and reserve a time slot — your bookings will show up here."
+          action={
+            <Button onClick={() => navigate("/dashboard")}>
+              Browse stadiums
+            </Button>
+          }
         />
       )}
 
@@ -241,69 +278,117 @@ function IncomingReservations() {
               tab === "upcoming" ? "resv-tab-upcoming" : "resv-tab-past"
             }
           >
-          <p className="resv-count">
-            {visible.length} {visible.length === 1 ? "reservation" : "reservations"}
-          </p>
+            <p className="resv-count">
+              {visible.length}{" "}
+              {visible.length === 1 ? "reservation" : "reservations"}
+            </p>
 
-          {visible.length === 0 ? (
-            <EmptyState
-              icon={<TicketIcon size={28} />}
-              title="Nothing here"
-              message="No reservations match these filters. Try a different tab or filter."
-            />
-          ) : (
-            <ul className="resv-list">
-              {visible.map((reservation) => {
-                const slot = reservation.slot;
-                const stadium = slot?.stadium;
-                const isCancelled = reservation.status === "cancelled";
-                return (
-                  <li key={reservation.id} className="resv-card">
-                    <div className="resv-info">
-                      <span className="resv-datetime">
-                        {slot ? formatSlotDate(slot.date) : "—"}
-                        {slot && (
-                          <span className="resv-time">
-                            <ClockIcon size={14} />
-                            {formatTimeRange(slot.startTime, slot.endTime)}
+            {visible.length === 0 ? (
+              <EmptyState
+                icon={<TicketIcon size={28} />}
+                title="Nothing here"
+                message="No reservations match these filters. Try a different tab or filter."
+              />
+            ) : (
+              <ul className="resv-list">
+                {visible.map((reservation) => {
+                  const slot = reservation.slot;
+                  const stadium = slot?.stadium;
+                  const isCancelled = reservation.status === "cancelled";
+                  const isUpcoming = slotDayStart(reservation) >= startOfToday();
+                  const canCancel = !isCancelled && isUpcoming;
+                  return (
+                    <li key={reservation.id} className="resv-card">
+                      <div className="resv-info">
+                        <span className="resv-datetime">
+                          {slot ? formatSlotDate(slot.date) : "—"}
+                          {slot && (
+                            <span className="resv-time">
+                              <ClockIcon size={14} />
+                              {formatTimeRange(slot.startTime, slot.endTime)}
+                            </span>
+                          )}
+                        </span>
+                        <div className="resv-sub">
+                          <span className="resv-stadium-tag">
+                            <StadiumIcon size={14} />
+                            {stadium?.name ?? "Stadium"}
                           </span>
-                        )}
-                      </span>
-                      <div className="resv-sub">
-                        <span className="resv-stadium-tag">
-                          <StadiumIcon size={14} />
-                          {stadium?.name ?? "Stadium"}
-                        </span>
-                        <span className="resv-org">
-                          <UserIcon size={14} />
-                          {reservation.organizer?.username ?? "Organizer"}
-                        </span>
+                          {stadium?.location && (
+                            <span className="resv-loc">
+                              <MapPinIcon size={14} />
+                              {stadium.location}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    <Badge tone={isCancelled ? "neutral" : "success"}>
-                      {isCancelled ? "Cancelled" : "Confirmed"}
-                    </Badge>
+                      {/* Order is fixed L→R: [Cancel?] · Status · Message, so the
+                          Status badge and Message button never shift when Cancel
+                          is absent — only the optional Cancel appears on the left. */}
+                      {canCancel && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          aria-label={`Cancel reservation at ${
+                            stadium?.name ?? "this stadium"
+                          }${slot ? ` on ${formatSlotDate(slot.date)}` : ""}`}
+                          onClick={() => setPendingCancel(reservation)}
+                        >
+                          Cancel
+                        </Button>
+                      )}
 
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      iconLeft={<MessageIcon size={16} />}
-                      loading={messagingId === reservation.id}
-                      onClick={() => messageOrganizer(reservation)}
-                    >
-                      Message
-                    </Button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                      <Badge tone={isCancelled ? "neutral" : "success"}>
+                        {isCancelled ? "Cancelled" : "Confirmed"}
+                      </Badge>
+
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        iconLeft={<MessageIcon size={16} />}
+                        loading={messagingId === reservation.id}
+                        aria-label={`Message the owner of ${stadium?.name ?? "this stadium"}`}
+                        onClick={() => messageOwner(reservation)}
+                      >
+                        Message
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         </>
       )}
+
+      <ConfirmDialog
+        open={pendingCancel !== null}
+        title="Cancel reservation?"
+        message={
+          pendingCancel?.slot
+            ? `Cancel your booking at ${
+                pendingCancel.slot.stadium?.name ?? "this stadium"
+              } on ${formatSlotDate(
+                pendingCancel.slot.date,
+                "en-US",
+              )}, ${formatTimeRange(
+                pendingCancel.slot.startTime,
+                pendingCancel.slot.endTime,
+                "en-US",
+              )}?\n\nThe slot will be released for others to book.`
+            : ""
+        }
+        confirmLabel="Cancel reservation"
+        cancelLabel="Keep it"
+        tone="danger"
+        centered
+        loading={cancelling}
+        onConfirm={confirmCancel}
+        onClose={() => !cancelling && setPendingCancel(null)}
+      />
     </div>
   );
 }
 
-export default IncomingReservations;
+export default MyReservations;

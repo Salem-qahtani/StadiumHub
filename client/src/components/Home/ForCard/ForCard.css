@@ -99,6 +99,14 @@
   color: rgb(0, 0, 0);
 }
 
+/* ---- Responsive: full-width when the cards stack ---- */
+@media (max-width: 900px) {
+  .owner-card,
+  .organizer-card {
+    max-width: 100%;
+  }
+}
+
 /* ── buttons ── */
 .owner-button {
   display: flex;

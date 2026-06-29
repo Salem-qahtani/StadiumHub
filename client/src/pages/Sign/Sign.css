@@ -20,7 +20,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 30px;
-  width: 1000px;
+  width: min(1000px, 94vw);
   background-color: white;
   border-radius: var(--radius-icon);
   box-shadow: 0px 0px 22px #0b35113a;
@@ -100,4 +100,21 @@ Playfair Display
 .cover::selection {
   background-color: var(--color-primary-light);
   color: black;
+}
+
+/* ---- Responsive: single-column phone layout ---- */
+@media (max-width: 640px) {
+  /* keep a gap on both sides so the page background shows around the card */
+  .sign-body {
+    padding-inline: 20px;
+  }
+  .forms-container {
+    width: 100%;
+    max-width: 440px;
+  }
+  /* the sliding marketing panel can't work in one column — drop it and let the
+     active form fill the card (the mobile toggle link handles switching) */
+  .cover {
+    display: none;
+  }
 }

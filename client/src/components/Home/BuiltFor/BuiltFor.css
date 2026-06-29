@@ -1,15 +1,16 @@
 .built-for-section {
   background-color: #000000;
-  padding: 60px 150px;
+  padding: 60px clamp(20px, 8vw, 150px);
 }
 .built-for-title {
-  font-size: 6em;
+  font-size: clamp(2.5rem, 9vw, 6em);
   color: white;
   font-family: "Bricolage Grotesque";
   letter-spacing: -4px;
   line-height: 1;
   margin-top: 20px;
   margin-bottom: 20px;
+  overflow-wrap: break-word;
 }
 .built-for-title::selection {
   background-color: var(--color-primary-light);
@@ -35,4 +36,16 @@
   display: flex;
   gap: 40px;
   justify-content: center;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .built-for-title {
+    letter-spacing: -2px;
+  }
+  .for-cards-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
 }

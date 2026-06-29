@@ -1,16 +1,17 @@
 .hero-section {
   background: linear-gradient(135deg, #0a0c0a 0%, #1b2d1d 60%, #0a0d0a 100%);
-  padding: 0px 150px;
+  padding-inline: clamp(20px, 8vw, 150px);
   padding-top: 100px;
   padding-bottom: 30px;
 }
 .hero-text {
-  font-size: 15em;
+  font-size: clamp(3.25rem, 13vw, 15em);
   margin-top: 40px;
   color: white;
   font-family: "Bricolage Grotesque";
   letter-spacing: -6px;
   line-height: 1;
+  overflow-wrap: break-word;
 }
 .hero-text::selection {
   background-color: var(--color-primary-light);
@@ -90,4 +91,40 @@
 }
 .sign-in-p a:hover {
   color: rgba(255, 255, 255, 0.918);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .hero-section {
+    padding-top: 90px;
+  }
+  /* stack the description above the buttons instead of side-by-side */
+  .hero-body-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .hero-body {
+    max-width: none;
+  }
+  .hero-buttons-container {
+    align-items: stretch;
+    width: 100%;
+  }
+  .hero-buttons {
+    padding: 10px 0;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 600px) {
+  .hero-text {
+    letter-spacing: -2px;
+  }
+  .hero-buttons .green-button,
+  .hero-buttons .black-button {
+    flex: 1 1 auto;
+    font-size: 1.1em;
+    justify-content: center;
+  }
 }

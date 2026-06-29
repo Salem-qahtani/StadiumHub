@@ -3,15 +3,23 @@ import multer from "multer";
 
 //   - fileSize: 5MB max per image
 //   - files:    6 images max per request
-// And fileFilter rejects anything that isn't an image/* mimetype.
+// fileFilter uses an explicit allowlist of raster types. SVG is deliberately
+// excluded: it can carry embedded <script>, so accepting "image/*" wholesale
+// would be a stored-XSS vector when the URL is opened directly.
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024, files: 6 },
   fileFilter: (_req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) {
+    if (ALLOWED_IMAGE_TYPES.includes(file.mimetype)) {
       cb(null, true); // accept
     } else {
-      cb(new Error("Only image files are allowed")); // reject with a message
+      cb(new Error("Only JPEG, PNG, WebP, or GIF images are allowed"));
     }
   },
 });

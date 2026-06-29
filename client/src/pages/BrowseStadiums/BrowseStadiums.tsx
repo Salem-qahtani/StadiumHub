@@ -70,8 +70,10 @@ function BrowseStadiums() {
     if (messagingId !== null) return; // a message request is already in flight
     setMessagingId(stadium.id);
     try {
-      await startConversation({ ownerId: stadium.ownerId });
-      navigate("/dashboard/messages");
+      const conv = await startConversation({ ownerId: stadium.ownerId });
+      navigate("/dashboard/messages", {
+        state: { conversationId: conv.id, peerName: conv.owner?.username },
+      });
     } catch (err) {
       toast.error(getErrorMessage(err, "Couldn't open the conversation."));
     } finally {

@@ -17,10 +17,11 @@ export async function getUserConversation(
 
 async function getMessages(req: Request, res: Response, next: NextFunction) {
   try {
-    const conversation = await getUserConversation(
-      parseInt(req.params.id as string),
-      req.userId!,
-    );
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "invalid conversation id" });
+    }
+    const conversation = await getUserConversation(id, req.userId!);
     if (!conversation) {
       return res.status(404).json({ error: "conversation not found" });
     }
@@ -38,10 +39,11 @@ async function getMessages(req: Request, res: Response, next: NextFunction) {
 
 async function sendMessage(req: Request, res: Response, next: NextFunction) {
   try {
-    const conversation = await getUserConversation(
-      parseInt(req.params.id as string),
-      req.userId!,
-    );
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "invalid conversation id" });
+    }
+    const conversation = await getUserConversation(id, req.userId!);
     if (!conversation) {
       return res.status(404).json({ error: "conversation not found" });
     }
@@ -72,10 +74,11 @@ async function sendMessage(req: Request, res: Response, next: NextFunction) {
 
 async function markAsRead(req: Request, res: Response, next: NextFunction) {
   try {
-    const conversation = await getUserConversation(
-      parseInt(req.params.id as string),
-      req.userId!,
-    );
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "invalid conversation id" });
+    }
+    const conversation = await getUserConversation(id, req.userId!);
     if (!conversation) {
       return res.status(404).json({ error: "conversation not found" });
     }

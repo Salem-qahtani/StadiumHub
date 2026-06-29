@@ -129,6 +129,15 @@ async function updateStadium(req: Request, res: Response, next: NextFunction) {
 
     const { name, location, description, images } = req.body;
 
+    // A provided field must be a non-empty string; reject blanks rather than
+    // silently falling back to the old value (which `||` used to do).
+    if (
+      (name !== undefined && !String(name).trim()) ||
+      (location !== undefined && !String(location).trim()) ||
+      (description !== undefined && !String(description).trim())
+    ) {
+      return res.status(400).json({ error: "fields cannot be empty" });
+    }
     if (hasInvalidImages(images)) {
       return res
         .status(400)
@@ -137,11 +146,12 @@ async function updateStadium(req: Request, res: Response, next: NextFunction) {
     const updated = await prisma.stadium.update({
       where: { id: stadium.id },
       // only updates name, location, description, images — not the whole req.body.
-      // images is replaced wholesale when provided; undefined leaves it unchanged.
+      // `?? old` leaves a field unchanged only when it's omitted (undefined);
+      // images is replaced wholesale when provided.
       data: {
-        name: name || stadium.name,
-        location: location || stadium.location,
-        description: description || stadium.description,
+        name: name ?? stadium.name,
+        location: location ?? stadium.location,
+        description: description ?? stadium.description,
         images: images === undefined ? stadium.images : images,
       },
     });
