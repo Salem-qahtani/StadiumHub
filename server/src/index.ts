@@ -90,18 +90,6 @@ app.use(globalLimiter);
 
 app.use(express.json());
 
-// TEMP (remove after deploy): inspect the proxy chain to pick `trust proxy`.
-// Hit https://<your-app>/api/_ip and read `xForwardedFor`:
-//   - it's an ordered list, client-first: "<realClientIP>, <proxy1>, <proxy2>".
-//   - the number of proxy IPs your infra added = the `trust proxy` value.
-//   - with `trust proxy` set correctly, `ip` should equal your real public IP.
-app.get("/api/_ip", (req, res) => {
-  res.json({
-    ip: req.ip,
-    xForwardedFor: req.headers["x-forwarded-for"] ?? null,
-  });
-});
-
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/stadiums", stadiumRoutes);
