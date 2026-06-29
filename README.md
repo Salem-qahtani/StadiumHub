@@ -8,10 +8,7 @@ StadiumHub is a full-stack TypeScript monorepo: an Express + Prisma REST API wit
 
 ## 🚀 Live Demo
 
-| | URL |
-| --- | --- |
-| **Frontend (app)** | https://frontend-production-9175.up.railway.app |
-| **Backend (API)** | https://backend-production-fded8.up.railway.app/api |
+**🔗 https://stadiumhubs.com**
 
 ### Try it instantly
 
