@@ -6,9 +6,9 @@ let socket: Socket | null = null;
 
 // Socket connects to the server origin — the same VITE_API_URL used by the REST
 // layer, minus the trailing /api path (falls back to local dev).
-const SOCKET_URL = (
-  import.meta.env.VITE_API_URL ?? "http://localhost:3000/api"
-).replace(/\/api\/?$/, "");
+const SOCKET_URL = (import.meta.env.VITE_API_URL ?? "http://localhost:3000/api")
+  .trim()
+  .replace(/\/api\/?$/, "");
 
 // Lazily connect (once) using the same JWT the REST layer uses. The server
 // authenticates the handshake via socket.handshake.auth.token.

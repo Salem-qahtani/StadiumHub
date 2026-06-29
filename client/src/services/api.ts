@@ -1,8 +1,11 @@
 import axios from "axios";
 
 // Configurable per environment; falls back to local dev. Set VITE_API_URL to
-// the deployed backend base (including /api) in production.
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
+// the deployed backend base (including /api) in production. `.trim()` guards
+// against a stray space in the env value (which silently breaks Socket.IO).
+const API_URL = (
+  import.meta.env.VITE_API_URL ?? "http://localhost:3000/api"
+).trim();
 
 // Create axios instance
 const api = axios.create({
