@@ -14,8 +14,6 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import jwt from "jsonwebtoken";
 import { getUserConversation } from "./controllers/messageControllers.js";
 
-// Refuse to start without an explicit CORS origin — an unset FRONTEND_URL would
-// make both the REST `cors` and the Socket.IO CORS fall back to wildcard (*).
 if (!process.env.FRONTEND_URL) {
   throw new Error("FRONTEND_URL is not set");
 }
@@ -23,12 +21,6 @@ if (!process.env.FRONTEND_URL) {
 const app = express();
 const server = createServer(app);
 const io = initSocket(server);
-
-// DEPLOYMENT (Railway): uncomment so express-rate-limit keys on the real client
-// IP from X-Forwarded-For instead of Railway's edge proxy IP (otherwise all
-// users share one rate-limit bucket). 1 = trust exactly one proxy hop. Never
-// use `true` — it lets clients spoof X-Forwarded-For and bypass the limiter.
-// app.set("trust proxy", 1);
 
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
@@ -92,6 +84,18 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 app.use(express.json());
+
+// TEMP (remove after deploy): inspect the proxy chain to pick `trust proxy`.
+// Hit https://<your-app>/api/_ip and read `xForwardedFor`:
+//   - it's an ordered list, client-first: "<realClientIP>, <proxy1>, <proxy2>".
+//   - the number of proxy IPs your infra added = the `trust proxy` value.
+//   - with `trust proxy` set correctly, `ip` should equal your real public IP.
+app.get("/api/_ip", (req, res) => {
+  res.json({
+    ip: req.ip,
+    xForwardedFor: req.headers["x-forwarded-for"] ?? null,
+  });
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
