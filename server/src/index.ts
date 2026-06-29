@@ -22,11 +22,11 @@ const app = express();
 const server = createServer(app);
 const io = initSocket(server);
 
-// Railway's edge sits behind Cloudflare (2 hops); proxying api.stadiumhubs.com
-// through our own Cloudflare proxy adds 1 more = 3. Trust exactly 3 so
+// Railway serves the app behind 2 proxy hops (its edge sits behind Cloudflare),
+// confirmed via /api/_ip: X-Forwarded-For had 2 entries. Trust exactly 2 so
 // express-rate-limit keys on the real client IP and clients can't spoof past it.
-// TEMP: verify via /api/_ip after the proxy is on, then remove the probe + this note.
-app.set("trust proxy", 3);
+// (api.stadiumhubs.com is DNS-only in Cloudflare — no extra proxy hop.)
+app.set("trust proxy", 2);
 
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
@@ -100,8 +100,8 @@ app.use("/api/conversations", conversationRoutes);
 app.use("/api/conversations", messageRoutes);
 app.use("/api/uploads", uploadRoutes);
 
-// TEMP probe — verify the trust-proxy hop count with Cloudflare proxy on.
-// req.ip should be YOUR real client IP; xff lists every hop. Remove after checking.
+// TEMP probe — verify trust-proxy gives the real client IP via api.stadiumhubs.com
+// (grey/DNS-only). req.ip should be YOUR IP, not Cloudflare's. Remove after checking.
 app.get("/api/_ip", (req, res) => {
   res.json({ ip: req.ip, xff: req.headers["x-forwarded-for"] });
 });
