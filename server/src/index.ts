@@ -22,6 +22,11 @@ const app = express();
 const server = createServer(app);
 const io = initSocket(server);
 
+// Railway serves the app behind 2 proxy hops (its edge sits behind Cloudflare),
+// confirmed via /api/_ip: X-Forwarded-For had 2 entries. Trust exactly 2 so
+// express-rate-limit keys on the real client IP and clients can't spoof past it.
+app.set("trust proxy", 2);
+
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   if (!token) {
