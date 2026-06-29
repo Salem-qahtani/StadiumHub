@@ -100,12 +100,6 @@ app.use("/api/conversations", conversationRoutes);
 app.use("/api/conversations", messageRoutes);
 app.use("/api/uploads", uploadRoutes);
 
-// TEMP probe — verify trust-proxy gives the real client IP via api.stadiumhubs.com
-// (grey/DNS-only). req.ip should be YOUR IP, not Cloudflare's. Remove after checking.
-app.get("/api/_ip", (req, res) => {
-  res.json({ ip: req.ip, xff: req.headers["x-forwarded-for"] });
-});
-
 // 404
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
