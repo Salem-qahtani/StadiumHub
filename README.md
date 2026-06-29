@@ -293,9 +293,3 @@ Three Railway services: **PostgreSQL** + **backend** (`server/`) + **frontend** 
 - Role authorization is enforced **server-side** in controllers, not just in the UI.
 - Image uploads are validated (image-only, ≤6 files, ≤5 MB each) and rejected for non-owners *before* buffering.
 - Only `https://res.cloudinary.com/` image URLs are accepted when creating/updating stadiums.
-
----
-
-## 📄 License
-
-ISC.
