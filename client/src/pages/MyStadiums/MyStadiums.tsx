@@ -303,6 +303,7 @@ function MyStadiums() {
           <TextField
             label="Name"
             required
+            maxLength={100}
             value={form.name}
             error={formErrors.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -311,6 +312,7 @@ function MyStadiums() {
           <TextField
             label="Location"
             required
+            maxLength={120}
             value={form.location}
             error={formErrors.location}
             onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -319,6 +321,7 @@ function MyStadiums() {
           <TextArea
             label="Description"
             required
+            maxLength={2000}
             value={form.description}
             error={formErrors.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}

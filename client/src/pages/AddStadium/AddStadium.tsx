@@ -80,6 +80,7 @@ function AddStadium() {
         <TextField
           label="Name"
           required
+          maxLength={100}
           value={form.name}
           error={errors.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -89,6 +90,7 @@ function AddStadium() {
         <TextField
           label="Location"
           required
+          maxLength={120}
           value={form.location}
           error={errors.location}
           onChange={(e) => setForm({ ...form, location: e.target.value })}
@@ -97,6 +99,7 @@ function AddStadium() {
         <TextArea
           label="Description"
           required
+          maxLength={2000}
           value={form.description}
           error={errors.description}
           hint="Mention the surface, size, and facilities organizers care about."

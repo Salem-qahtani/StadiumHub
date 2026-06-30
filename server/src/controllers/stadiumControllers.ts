@@ -1,6 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "../lib/prisma.js";
 
+const FIELD_LIMITS = { name: 100, location: 120, description: 2000 } as const;
+
+// Returns the name of the first field that exceeds its max length, or null.
+function tooLongField(fields: {
+  name?: unknown;
+  location?: unknown;
+  description?: unknown;
+}): keyof typeof FIELD_LIMITS | null {
+  for (const key of ["name", "location", "description"] as const) {
+    const value = fields[key];
+    if (typeof value === "string" && value.trim().length > FIELD_LIMITS[key]) {
+      return key;
+    }
+  }
+  return null;
+}
+
 function hasInvalidImages(images: unknown): boolean {
   if (images === undefined) return false;
   return (
@@ -27,6 +44,12 @@ async function createStadium(req: Request, res: Response, next: NextFunction) {
     if (!name?.trim() || !location?.trim() || !description?.trim()) {
       return res.status(400).json({ error: "All fields are required" });
     }
+    const longField = tooLongField({ name, location, description });
+    if (longField) {
+      return res.status(400).json({
+        error: `${longField} must be at most ${FIELD_LIMITS[longField]} characters`,
+      });
+    }
     if (hasInvalidImages(images)) {
       return res
         .status(400)
@@ -34,10 +57,12 @@ async function createStadium(req: Request, res: Response, next: NextFunction) {
     }
 
     const stadium = await prisma.stadium.create({
+      // store the same trimmed value that was length-checked, so whitespace
+      // padding can't slip past the limit measured on `value.trim()`.
       data: {
-        name,
-        location,
-        description,
+        name: name.trim(),
+        location: location.trim(),
+        description: description.trim(),
         images: images ?? [],
         ownerId,
       },
@@ -138,6 +163,12 @@ async function updateStadium(req: Request, res: Response, next: NextFunction) {
     ) {
       return res.status(400).json({ error: "fields cannot be empty" });
     }
+    const longField = tooLongField({ name, location, description });
+    if (longField) {
+      return res.status(400).json({
+        error: `${longField} must be at most ${FIELD_LIMITS[longField]} characters`,
+      });
+    }
     if (hasInvalidImages(images)) {
       return res
         .status(400)
@@ -149,9 +180,9 @@ async function updateStadium(req: Request, res: Response, next: NextFunction) {
       // `?? old` leaves a field unchanged only when it's omitted (undefined);
       // images is replaced wholesale when provided.
       data: {
-        name: name ?? stadium.name,
-        location: location ?? stadium.location,
-        description: description ?? stadium.description,
+        name: (name ?? stadium.name).trim(),
+        location: (location ?? stadium.location).trim(),
+        description: (description ?? stadium.description).trim(),
         images: images === undefined ? stadium.images : images,
       },
     });
