@@ -1,4 +1,4 @@
-# StadiumHub ⚽
+# StadiumHub 
 
 > A two-sided stadium-booking platform. **Owners** publish stadiums and time slots; **organizers** browse and reserve them; both parties chat in real time.
 
