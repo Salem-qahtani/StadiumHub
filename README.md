@@ -16,7 +16,7 @@ You can sign up and create your own account from the **Sign** page, or use one o
 
 | Role | Username | Password | What you can do |
 | --- | --- | --- | --- |
-| **Owner** | `admin2` | `12345678A` | Publish stadiums, manage time slots, view incoming reservations, chat with organizers |
+| **Owner** | `admin3` | `12345678A` | Publish stadiums, manage time slots, view incoming reservations, chat with organizers |
 | **Organizer** | `user2` | `12345678B` | Browse stadiums, reserve slots, manage your reservations, chat with owners |
 
 > Tip: open the two accounts in separate browsers (or one normal + one incognito window) to see the **real-time chat** and live reservation updates between an owner and an organizer.
